@@ -59,10 +59,7 @@
             transition: opacity 1.2s var(--ease-premium), transform 1.2s var(--ease-premium);
         }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         .cosmos-card {
             background: rgba(10, 10, 10, 0.3);
@@ -70,6 +67,7 @@
             border: 1px solid rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
             transition: all 0.6s var(--ease-premium);
+            cursor: pointer;
         }
 
         .cosmos-card:hover {
@@ -84,6 +82,7 @@
             letter-spacing: 0.15em;
             color: var(--text-dim);
             transition: color 0.4s var(--ease-premium);
+            cursor: pointer;
         }
 
         .nav-link:hover { color: #ffffff; }
@@ -115,11 +114,7 @@
             letter-spacing: -0.03em;
         }
 
-        .stats-highlight {
-            color: #ffffff;
-            font-weight: 700;
-            margin-right: 6px;
-        }
+        .stats-highlight { color: #ffffff; font-weight: 700; margin-right: 6px; }
 
         .es-rfs-badge {
             display: inline-block;
@@ -133,14 +128,35 @@
             text-transform: uppercase;
         }
 
-        /* RWA Ledger Drawer Styles */
-        #ledger-drawer {
+        /* --- SOVEREIGN MULTI-SIDEBAR --- */
+        #sovereign-sidebar {
+            position: fixed;
+            right: 0; top: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(40px);
+            z-index: 90;
+            border-l: 1px solid rgba(255,255,255,0.05);
             transform: translateX(100%);
             transition: transform 0.8s var(--ease-premium);
+            padding: 3rem;
+            overflow-y: auto;
         }
-        #ledger-drawer.open {
-            transform: translateX(0);
+
+        #sovereign-sidebar.open { transform: translateX(0); }
+
+        .sidebar-close {
+            font-size: 9px;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            display: inline-block;
         }
+        .sidebar-close:hover { color: white; }
 
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
@@ -148,7 +164,6 @@
         .delay-4 { transition-delay: 0.4s; }
 
         ::-webkit-scrollbar { width: 3px; }
-        ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #333; }
     </style>
 </head>
@@ -170,17 +185,10 @@
         </div>
     </div>
 
-    <div id="ledger-drawer" class="fixed right-0 top-0 h-full w-full md:w-96 bg-black/80 backdrop-blur-3xl z-[80] border-l border-white/10 p-12 overflow-y-auto">
-        <div class="flex justify-between items-center mb-12">
-            <h2 class="text-xs uppercase tracking-[0.4em] font-bold text-emerald-500">RWA Ledger</h2>
-            <button onclick="toggleLedger()" class="text-white/40 hover:text-white text-[9px] uppercase tracking-widest">Close</button>
-        </div>
-        <div id="ledger-content">
+    <div id="sovereign-sidebar">
+        <div class="sidebar-close" onclick="closeSidebar()">[ Close Session ]</div>
+        <div id="sidebar-dynamic-content">
             </div>
-        <div class="mt-12 p-6 border border-white/5 rounded bg-white/5">
-            <div class="text-[8px] text-gray-500 uppercase tracking-widest mb-2">Total Node Value</div>
-            <div class="text-2xl font-light">$4,250,000.00</div>
-        </div>
     </div>
 
     <div class="content-overlay">
@@ -188,30 +196,26 @@
             <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal">2050</span></div>
             
             <div class="hidden md:flex gap-12">
-                <a href="#" class="nav-link">ES-RFS Protocol</a>
-                <a href="#" class="nav-link">Sovereign Nodes</a>
-                <a href="#" onclick="toggleLedger()" class="nav-link text-emerald-500">View RWA Ledger</a>
-                <a href="#" class="nav-link">Natural Capital</a>
+                <a onclick="openSidebar('ETHICAL')" class="nav-link">ES-RFS Protocol</a>
+                <a onclick="openSidebar('STANDALONE')" class="nav-link">Sovereign Nodes</a>
+                <a onclick="openSidebar('SOVEREIGN')" class="nav-link text-emerald-500">View RWA Ledger</a>
+                <a onclick="openSidebar('REGEN')" class="nav-link">Natural Capital</a>
             </div>
 
-            <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">
-                CONNECT TO GLOBAL EXPERT
-            </a>
+            <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">CONNECT</a>
         </nav>
 
         <main class="container mx-auto px-12 pt-24">
             <div class="max-w-3xl">
                 <div class="es-rfs-badge reveal">Authorized ES-RFS Standard</div>
-                <h1 class="hero-title mb-10 reveal delay-1">
-                    Ethical. Stand-alone.<br>Regenerative Future.
-                </h1>
+                <h1 class="hero-title mb-10 reveal delay-1">Ethical. Stand-alone.<br>Regenerative Future.</h1>
                 <p class="text-gray-400 text-xl mb-14 max-w-xl leading-relaxed font-light reveal delay-2">
                     Beroperasi di bawah protokol kedaulatan <span class="text-white">ES-RFS</span>. Sistem operasi mandiri yang mengawal aset dunia nyata dan memulihkan ekosistem tanpa pergantungan pusat.
                 </p>
 
                 <div class="flex gap-6 mb-24 reveal delay-3">
                     <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Sovereign Node</button>
-                    <button onclick="toggleLedger()" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Ledger</button>
+                    <button onclick="openSidebar('SOVEREIGN')" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Ledger</button>
                 </div>
 
                 <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
@@ -231,89 +235,128 @@
             <span class="text-white tracking-[0.4em] font-bold">ES-RFS SOVEREIGN</span>
         </div>
         <div class="text-white flex items-center gap-3">
-            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span> 
-            STATUS: STAND-ALONE_ACTIVE
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> STATUS: STAND-ALONE_ACTIVE
         </div>
-        <div class="hidden md:block italic text-white/20">"The Gold Standard of 2050"</div>
     </footer>
 
     <script>
-        // --- LOGIK RWA LEDGER ---
-        const SOVEREIGN_ASSETS = [
-            { type: 'GOLD_BULLION', value: '1.2kg', status: 'VERIFIED', location: 'Local Vault' },
-            { type: 'NATURAL_LAND', value: '4.5 Hectares', status: 'REGENERATING', location: 'Borneo Sector' },
-            { type: 'CLEAN_WATER_RIGHTS', value: '500k Liters/yr', status: 'ACTIVE', location: 'Highland Node' }
-        ];
+        // --- DATA SIDEBAR ---
+        const SIDEBAR_DATA = {
+            'ETHICAL': {
+                title: 'ES-RFS Protocol',
+                badge: 'Algorithm Standard',
+                body: `
+                    <p class="text-gray-400 text-sm leading-relaxed mb-8">Manual protokol kedaulatan digital yang mengutamakan privasi mutlak dan integritas data tanpa pihak ketiga.</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white/5 border-l-2 border-emerald-500">
+                            <div class="text-[10px] font-bold text-emerald-500 mb-1 uppercase">Moral compass</div>
+                            <div class="text-xs text-gray-300">Algoritma yang menapis transaksi berdasarkan impak etika.</div>
+                        </div>
+                        <div class="p-4 bg-white/5 border-l-2 border-blue-500">
+                            <div class="text-[10px] font-bold text-blue-500 mb-1 uppercase">Data Sovereignty</div>
+                            <div class="text-xs text-gray-300">Setiap bait data dimiliki sepenuhnya oleh pemilik Node.</div>
+                        </div>
+                    </div>`
+            },
+            'STANDALONE': {
+                title: 'Sovereign Nodes',
+                badge: 'Network Infrastructure',
+                body: `
+                    <div class="mb-8">
+                        <div class="text-[10px] text-gray-500 uppercase mb-4 tracking-widest">Active Global Nodes</div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/5">
+                            <span class="text-xs">Node_KL_Primary</span>
+                            <span class="text-[10px] text-emerald-500">ONLINE</span>
+                        </div>
+                        <div class="flex justify-between items-center py-3 border-b border-white/5">
+                            <span class="text-xs">Node_Borneo_Safe</span>
+                            <span class="text-[10px] text-emerald-500">ONLINE</span>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-blue-500/10 border border-blue-500/20 text-center">
+                        <div class="text-xs uppercase mb-1">Local Mesh Network</div>
+                        <div class="text-2xl font-bold">100% Secure</div>
+                    </div>`
+            },
+            'SOVEREIGN': {
+                title: 'RWA Ledger',
+                badge: 'Asset Verification',
+                body: `
+                    <div class="space-y-4 mb-8">
+                        <div class="border-l border-emerald-500 pl-4 py-4 bg-emerald-500/5">
+                            <div class="text-[8px] text-emerald-500 tracking-widest font-bold mb-1 uppercase">Gold Bullion</div>
+                            <div class="text-lg font-medium text-white">1.2kg</div>
+                            <div class="text-[9px] text-gray-500 uppercase">Verified Local Vault</div>
+                        </div>
+                        <div class="border-l border-blue-500 pl-4 py-4 bg-blue-500/5">
+                            <div class="text-[8px] text-blue-500 tracking-widest font-bold mb-1 uppercase">Natural Land</div>
+                            <div class="text-lg font-medium text-white">4.5 Hectares</div>
+                            <div class="text-[9px] text-gray-500 uppercase">Borneo Sector</div>
+                        </div>
+                    </div>
+                    <div class="mt-12 p-6 border border-white/5 rounded bg-white/5">
+                        <div class="text-[8px] text-gray-500 uppercase tracking-widest mb-2">Total Node Value</div>
+                        <div class="text-2xl font-light">$4,250,000.00</div>
+                    </div>`
+            },
+            'REGEN': {
+                title: 'Natural Capital',
+                badge: 'Regenerative Metrics',
+                body: `
+                    <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 mb-6 text-center">
+                        <div class="text-4xl font-light mb-2">14,204</div>
+                        <div class="text-[9px] text-emerald-500 tracking-[0.3em] font-bold uppercase">Carbon Credits Restored</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-white/5 text-center">
+                            <div class="text-lg">82%</div>
+                            <div class="text-[8px] text-gray-500 uppercase">Biodiversity</div>
+                        </div>
+                        <div class="p-4 bg-white/5 text-center">
+                            <div class="text-lg">12.5k</div>
+                            <div class="text-[8px] text-gray-500 uppercase">Water Purity</div>
+                        </div>
+                    </div>`
+            }
+        };
 
-        function showLedger() {
-            const list = document.getElementById('ledger-content');
-            list.innerHTML = SOVEREIGN_ASSETS.map(asset => `
-                <div class="border-l border-emerald-500 pl-4 py-4 bg-emerald-500/5 mb-4 group hover:bg-emerald-500/10 transition-all">
-                    <div class="text-[8px] text-emerald-500 tracking-widest font-bold mb-1">${asset.type}</div>
-                    <div class="text-lg font-medium text-white">${asset.value}</div>
-                    <div class="text-[9px] text-gray-500 uppercase tracking-tighter mt-1">${asset.status} • ${asset.location}</div>
+        function openSidebar(key) {
+            const data = SIDEBAR_DATA[key];
+            const content = document.getElementById('sidebar-dynamic-content');
+            content.innerHTML = `
+                <div class="mb-12">
+                    <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-bold mb-4 uppercase">${data.badge}</div>
+                    <h2 class="text-3xl font-medium tracking-tighter">${data.title}</h2>
                 </div>
-            `).join('');
+                ${data.body}
+            `;
+            document.getElementById('sovereign-sidebar').classList.add('open');
         }
 
-        function toggleLedger() {
-            const drawer = document.getElementById('ledger-drawer');
-            drawer.classList.toggle('open');
-            if(drawer.classList.contains('open')) showLedger();
+        function closeSidebar() {
+            document.getElementById('sovereign-sidebar').classList.remove('open');
         }
 
-        // --- ES-RFS SOVEREIGN AUTHENTICATION SEQUENCE ---
+        // --- AUTH LOGIC ---
         async function activateNode(nodeId) {
             const modal = document.getElementById('auth-modal');
-            const status = document.getElementById('auth-status');
-            const msg = document.getElementById('auth-msg');
             const steps = ['E', 'S', 'R', 'FS'];
-            const labels = {
-                'E': 'Ethical Standards Verified',
-                'S': 'Stand-alone Environment Secured',
-                'R': 'Regenerative Logic Synced',
-                'FS': 'Sovereignty Established'
-            };
-
-            steps.forEach(s => document.getElementById(`step-${s}`).className = 'w-10 h-1 border border-white/10 transition-all duration-700');
-            status.innerText = "Initiating ES-RFS Protocol";
-
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.add('opacity-100'), 10);
 
             for (let s of steps) {
-                msg.innerText = `Establishing ${s}...`;
-                await new Promise(r => setTimeout(r, 1000)); 
-                const el = document.getElementById(`step-${s}`);
-                el.classList.add('bg-emerald-500', 'border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.6)]');
-                msg.innerText = labels[s];
-                await new Promise(r => setTimeout(r, 600));
+                document.getElementById('auth-msg').innerText = `Establishing ${s}...`;
+                await new Promise(r => setTimeout(r, 800));
+                document.getElementById(`step-${s}`).classList.add('bg-emerald-500', 'border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.6)]');
             }
 
-            status.innerText = "AUTHENTICATION COMPLETE";
-            msg.innerText = "Node Is Now Sovereign.";
-            window.clarity("event", `ESRFS_AUTH_SUCCESS_${nodeId}`);
-            
             setTimeout(() => {
                 modal.classList.remove('opacity-100');
                 setTimeout(() => {
                     modal.classList.add('hidden');
-                    toggleLedger(); // Buka Ledger secara automatik selepas verify
+                    openSidebar('SOVEREIGN'); // Buka Ledger secara automatik
                 }, 700);
-            }, 2500);
-        }
-
-        // --- UI REVEAL OBSERVER ---
-        function initReveal() {
-            const observerOptions = { threshold: 0.15 };
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, observerOptions);
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            }, 1000);
         }
 
         // --- THREE.JS GLOBE ---
@@ -325,38 +368,22 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            const globeGeo = new THREE.SphereGeometry(2.5, 64, 64);
-            const globeMat = new THREE.PointsMaterial({ color: 0x444444, size: 0.015, transparent: true, opacity: 0.4 });
-            const globe = new THREE.Points(globeGeo, globeMat);
+            const globe = new THREE.Points(
+                new THREE.SphereGeometry(2.5, 64, 64),
+                new THREE.PointsMaterial({ color: 0x444444, size: 0.015, transparent: true, opacity: 0.4 })
+            );
             scene.add(globe);
-
-            function createRing(radius, color, op) {
-                const ring = new THREE.Mesh(
-                    new THREE.RingGeometry(radius, radius + 0.005, 120),
-                    new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: op })
-                );
-                ring.rotation.x = Math.PI / 2.2;
-                return ring;
-            }
-
-            const rwaRing = createRing(2.7, 0x3b82f6, 0.1);
-            const naturalRing = createRing(3.0, 0x10b981, 0.08);
-            scene.add(rwaRing, naturalRing);
-
-            camera.position.z = 7;
-            camera.position.x = 1.2;
+            camera.position.z = 7; camera.position.x = 1.2;
 
             function animate() {
                 requestAnimationFrame(animate);
                 globe.rotation.y += 0.0006;
-                rwaRing.rotation.z += 0.0008;
-                naturalRing.rotation.z -= 0.0004;
                 renderer.render(scene, camera);
             }
             animate();
         }
 
-        // --- RENDER PILLARS ---
+        // --- RENDER CARDS ---
         const pillars = [
             { id: "ETHICAL", name: "Ethical Algo", icon: "⚖️", desc: "Kompas moral digital. Melindungi data dan privasi mutlak pengguna." },
             { id: "STANDALONE", name: "Stand-alone OS", icon: "📱", desc: "Operasi 100% offline. Kedaulatan penuh tanpa Cloud pusat." },
@@ -364,28 +391,22 @@
             { id: "SOVEREIGN", name: "Sovereign RWA", icon: "🔐", desc: "Tokenisasi aset dunia nyata (RWA) yang sah dan berdaulat." }
         ];
 
-        function renderProducts() {
-            const list = document.getElementById('product-list');
-            list.innerHTML = pillars.map((p, i) => `
-                <div class="cosmos-card p-10 group reveal delay-${i+1}">
+        window.onload = () => {
+            initGlobe();
+            document.getElementById('product-list').innerHTML = pillars.map((p, i) => `
+                <div onclick="openSidebar('${p.id}')" class="cosmos-card p-10 group reveal delay-${i+1} active">
                     <div class="text-3xl mb-6 opacity-80 group-hover:opacity-100 transition-opacity">${p.icon}</div>
                     <div class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 mb-3 font-bold">ES-RFS_${p.id}</div>
                     <h3 class="text-xl font-medium mb-4">${p.name}</h3>
                     <p class="text-xs text-gray-500 mb-10 font-light leading-relaxed h-12">${p.desc}</p>
-                    <div class="flex justify-between items-center pt-8 border-t border-white/5">
-                        <span class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">Verified Standard</span>
-                        <div class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
-                    </div>
+                    <div class="pt-8 border-t border-white/5 text-[9px] text-gray-500 font-bold uppercase tracking-widest">Open Details</div>
                 </div>
             `).join('');
-            initReveal();
-        }
-
-        window.onload = () => {
-            initGlobe();
-            renderProducts();
-            initReveal();
-            window.clarity("event", "ESRFS_SOVEREIGN_READY");
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+            });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
     </script>
 </body>
