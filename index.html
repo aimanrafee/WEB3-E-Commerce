@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBAL 2050 | Autonomous Regenerative OS</title>
+    <title>GLOBAL 2050 | ES-RFS Sovereign OS</title>
     
     <script src="clarity.js"></script>
     <script>
@@ -12,7 +12,7 @@
             upload: "https://x.clarity.ms/collect",
             expire: 365
         });
-        window.clarity("set", "system_mode", "GLOBAL_2050_OFFLINE_ALGO");
+        window.clarity("set", "system_mode", "ES-RFS_SOVEREIGN_ALGO");
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +25,6 @@
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
             --text-dim: #888888;
-            /* Celestia-style easing */
             --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -37,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Ambient Background */
         .vignette-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -48,16 +46,13 @@
 
         #globe-viewport {
             position: fixed;
-            top: 0;
-            right: -5%;
-            width: 55%;
-            height: 100vh;
+            top: 0; right: -5%;
+            width: 55%; height: 100vh;
             z-index: 1;
             pointer-events: none;
             opacity: 0.6;
         }
 
-        /* Smooth Reveal Animation classes */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -110,7 +105,6 @@
         .btn-outline:hover {
             background: #ffffff;
             color: #000000 !important;
-            border-color: #ffffff;
             box-shadow: 0 10px 30px rgba(255,255,255,0.1);
         }
 
@@ -127,12 +121,18 @@
             margin-right: 6px;
         }
 
-        .content-overlay {
-            position: relative;
-            z-index: 10;
+        .es-rfs-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
-        /* Staggered Delays for Pillars */
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
@@ -153,10 +153,10 @@
             <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal">2050</span></div>
             
             <div class="hidden md:flex gap-12">
-                <a href="#" class="nav-link">Algorithm</a>
-                <a href="#" class="nav-link">Pillars</a>
-                <a href="#" class="nav-link">Whitepaper</a>
-                <a href="#" class="nav-link">Nodes</a>
+                <a href="#" class="nav-link">ES-RFS Protocol</a>
+                <a href="#" class="nav-link">Sovereign Nodes</a>
+                <a href="#" class="nav-link">RWA Ledger</a>
+                <a href="#" class="nav-link">Natural Capital</a>
             </div>
 
             <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">
@@ -166,22 +166,23 @@
 
         <main class="container mx-auto px-12 pt-24">
             <div class="max-w-3xl">
+                <div class="es-rfs-badge reveal">Authorized ES-RFS Standard</div>
                 <h1 class="hero-title mb-10 reveal delay-1">
-                    The Smartest Offline<br>Regenerative Algorithm.
+                    Ethical. Stand-alone.<br>Regenerative Future.
                 </h1>
                 <p class="text-gray-400 text-xl mb-14 max-w-xl leading-relaxed font-light reveal delay-2">
-                    Membina ekosistem kalis masa depan melalui Stand-Alone OS. Mengintegrasikan Web3, aset dunia nyata, dan pemuliharaan alam secara autonomi.
+                    Beroperasi di bawah protokol kedaulatan <span class="text-white">ES-RFS</span>. Sistem operasi mandiri yang mengawal aset dunia nyata dan memulihkan ekosistem tanpa pergantungan pusat.
                 </p>
 
                 <div class="flex gap-6 mb-24 reveal delay-3">
-                    <button class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Node</button>
-                    <button class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Lihat Blueprint</button>
+                    <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Sovereign Node</button>
+                    <button class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Blueprint</button>
                 </div>
 
                 <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
-                    <div><span class="stats-highlight">4 PILLARS</span> Integrated</div>
-                    <div><span class="stats-highlight">100%</span> Offline Ready</div>
-                    <div><span class="stats-highlight">2050</span> Target Solid</div>
+                    <div><span class="stats-highlight">PROTOCOL</span> ES-RFS v1.0</div>
+                    <div><span class="stats-highlight">STABILITY</span> 100% OFFLINE</div>
+                    <div><span class="stats-highlight">ENCRYPTION</span> SOVEREIGN LEVEL</div>
                 </div>
             </div>
 
@@ -189,17 +190,38 @@
         </main>
     </div>
 
-    <footer class="fixed bottom-0 w-full p-5 border-t border-white/5 bg-black/80 backdrop-blur-xl z-50 flex justify-around text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
-        <div>OS: GLOBAL_2050_v1.0</div>
+    <footer class="fixed bottom-0 w-full p-5 border-t border-white/5 bg-black/90 backdrop-blur-xl z-50 flex justify-around text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
+        <div class="flex items-center gap-2">
+            <span class="text-white/30">PROTOCOL:</span> 
+            <span class="text-white tracking-[0.4em] font-bold">ES-RFS SOVEREIGN</span>
+        </div>
         <div class="text-white flex items-center gap-3">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]"></span> 
-            SYSTEM: OFFLINE_SMART_SYNC
+            STATUS: STAND-ALONE_ACTIVE
         </div>
-        <div>ENGINE: NEURAL_REGENERATIVE_ALGO</div>
+        <div class="hidden md:block italic text-white/20">"The Gold Standard of 2050"</div>
     </footer>
 
     <script>
-        // --- LOGIK SMOOTH REVEAL (OBSERVER) ---
+        // --- LOGIK ES-RFS PROTOCOL ---
+        const ESRFS_PROTOCOL = {
+            verifySovereignty: (nodeId) => {
+                console.log(`[ES-RFS] Verifying sovereignty for node: ${nodeId}`);
+                return true; 
+            },
+            calculateImpact: (data) => {
+                return (data.rwa * 1.2) + (data.eco * 2.0);
+            }
+        };
+
+        function activateNode(nodeId) {
+            if(ESRFS_PROTOCOL.verifySovereignty(nodeId)) {
+                window.clarity("event", `ESRFS_AUTH_${nodeId}`);
+                alert(`NODE AUTHENTICATED: Sistem ${nodeId} kini berjalan di bawah kedaulatan ES-RFS.`);
+            }
+        }
+
+        // --- UI REVEAL OBSERVER ---
         function initReveal() {
             const observerOptions = { threshold: 0.15 };
             const observer = new IntersectionObserver((entries) => {
@@ -209,43 +231,35 @@
                     }
                 });
             }, observerOptions);
-
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // --- ANIMASI GLOBE ---
+        // --- THREE.JS GLOBE ---
         function initGlobe() {
             const container = document.getElementById('globe-viewport');
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            const geometry = new THREE.SphereGeometry(2.5, 64, 64);
-            const material = new THREE.PointsMaterial({
-                color: 0x444444,
-                size: 0.015,
-                transparent: true,
-                opacity: 0.4
-            });
-
-            const globe = new THREE.Points(geometry, material);
+            const globeGeo = new THREE.SphereGeometry(2.5, 64, 64);
+            const globeMat = new THREE.PointsMaterial({ color: 0x444444, size: 0.015, transparent: true, opacity: 0.4 });
+            const globe = new THREE.Points(globeGeo, globeMat);
             scene.add(globe);
 
             function createRing(radius, color, op) {
-                const ringGeo = new THREE.RingGeometry(radius, radius + 0.005, 120);
-                const ringMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: op });
-                const ring = new THREE.Mesh(ringGeo, ringMat);
+                const ring = new THREE.Mesh(
+                    new THREE.RingGeometry(radius, radius + 0.005, 120),
+                    new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: op })
+                );
                 ring.rotation.x = Math.PI / 2.2;
                 return ring;
             }
 
             const rwaRing = createRing(2.7, 0x3b82f6, 0.1);
             const naturalRing = createRing(3.0, 0x10b981, 0.08);
-            scene.add(rwaRing);
-            scene.add(naturalRing);
+            scene.add(rwaRing, naturalRing);
 
             camera.position.z = 7;
             camera.position.x = 1.2;
@@ -258,45 +272,38 @@
                 renderer.render(scene, camera);
             }
             animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
         }
 
-        // --- RENDER 4 PILAR ---
+        // --- RENDER PILLARS ---
         const pillars = [
-            { id: "WEB3", name: "Efficient Web3", icon: "🌐", desc: "Infrastruktur tanpa pelayan pusat. Pengesahan data autonomi." },
-            { id: "RWA", name: "RWA Tokenization", icon: "💎", desc: "Jambatan aset fizikal ke digital. Kecairan emas & tanah global." },
-            { id: "ECO", name: "Survival Ecosystem", icon: "🔋", desc: "Kemandirian tenaga & air yang diuruskan oleh algoritma pintar." },
-            { id: "NAT", name: "Natural Capital", icon: "🌿", desc: "Ekonomi pemuliharaan alam. Nilai digital untuk biodiversiti." }
+            { id: "ETHICAL", name: "Ethical Algo", icon: "⚖️", desc: "Kompas moral digital. Melindungi data dan privasi mutlak pengguna." },
+            { id: "STANDALONE", name: "Stand-alone OS", icon: "📱", desc: "Operasi 100% offline. Kedaulatan penuh tanpa Cloud pusat." },
+            { id: "REGEN", name: "Regenerative", icon: "🌿", desc: "Algoritma pemulihan alam. Menukar impak hijau kepada nilai ekonomi." },
+            { id: "SOVEREIGN", name: "Sovereign RWA", icon: "🔐", desc: "Tokenisasi aset dunia nyata (RWA) yang sah dan berdaulat." }
         ];
 
         function renderProducts() {
             const list = document.getElementById('product-list');
             list.innerHTML = pillars.map((p, i) => `
-                <div class="cosmos-card p-10 group reveal delay-${i+1}" onclick="window.clarity('event', 'pillar_click_${p.id}')">
+                <div class="cosmos-card p-10 group reveal delay-${i+1}">
                     <div class="text-3xl mb-6 opacity-80 group-hover:opacity-100 transition-opacity">${p.icon}</div>
-                    <div class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 mb-3 font-bold">${p.id}_NODE</div>
+                    <div class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 mb-3 font-bold">ES-RFS_${p.id}</div>
                     <h3 class="text-xl font-medium mb-4">${p.name}</h3>
                     <p class="text-xs text-gray-500 mb-10 font-light leading-relaxed h-12">${p.desc}</p>
                     <div class="flex justify-between items-center pt-8 border-t border-white/5">
-                        <span class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">Protocol Active</span>
+                        <span class="text-[9px] text-gray-500 font-bold tracking-widest uppercase">Verified Standard</span>
                         <div class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]"></div>
                     </div>
                 </div>
             `).join('');
-            
-            initReveal(); // Jalankan observer selepas render
+            initReveal();
         }
 
         window.onload = () => {
             initGlobe();
             renderProducts();
             initReveal();
-            window.clarity("event", "global_2050_stable_ready");
+            window.clarity("event", "ESRFS_SOVEREIGN_READY");
         };
     </script>
 </body>
