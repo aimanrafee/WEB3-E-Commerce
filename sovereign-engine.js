@@ -1,7 +1,7 @@
 /**
  * GLOBAL 2050 - SOVEREIGN ASSET ENGINE
  * Fokus: Logik Ekonomi, Penyimpanan Data LocalStorage, & MYR Currency.
- * Versi: 1.0.4 (Full MYR Integration)
+ * Versi: 1.0.5 (Async Modal Integration)
  */
 
 // 1. Inisialisasi Data dari LocalStorage
@@ -14,13 +14,10 @@ let userAssets = JSON.parse(localStorage.getItem('es_rfs_assets')) || {
 };
 
 // 2. Real-time Profit Ticker (Simulasi Pertumbuhan Dividen)
-// Aset yang dimiliki akan menghasilkan profit kecil secara automatik setiap saat
 setInterval(() => {
-    // Kadar keuntungan: Gold (5%) + Land (15%)
     const profitRate = (userAssets.gold * 0.05) + (userAssets.land * 0.15);
     
     if (profitRate > 0) {
-        // Simulasi profit per saat: Kadar tahunan dibahagi dengan 3600 (untuk simulasi pantas)
         userAssets.dividends += (profitRate / 3600); 
         saveAssets();
         updateTickerUI();
@@ -32,23 +29,71 @@ function saveAssets() {
     localStorage.setItem('es_rfs_assets', JSON.stringify(userAssets));
 }
 
-// 4. Fungsi Pembelian Aset (Sistem MYR)
-function purchaseAsset(type, amount, cost) {
+// 4. Fungsi Pembelian Aset Versi Smooth Embedded UI (Async)
+async function purchaseAsset(type, amount, cost) {
     const assetNames = {
         'gold': 'Gold Bullion LOT',
         'land': 'Regenerative Land Sector'
     };
 
-    if (confirm(`Sahkan protokol perolehan ${amount} unit ${assetNames[type]} dengan nilai RM ${cost.toLocaleString()}?`)) {
-        userAssets[type] += amount;
-        
-        // Bonus permulaan segera (0.1% daripada nilai pembelian)
-        userAssets.dividends += (cost * 0.001); 
-        
-        saveAssets();
-        alert("Transaksi Berjaya: Aset RWA telah dikunci dalam Sovereign Node anda.");
-        renderLedgerView();
-    }
+    const modal = document.getElementById('protocol-modal');
+    const modalContent = document.getElementById('protocol-modal-content');
+    const titleEl = document.getElementById('protocol-title');
+    const descEl = document.getElementById('protocol-desc');
+    const btnConfirm = document.getElementById('protocol-confirm');
+    const btnCancel = document.getElementById('protocol-cancel');
+
+    if (!modal || !modalContent) return;
+
+    // Set Maklumat Transaksi ke dalam Modal
+    titleEl.innerText = `Perolehan ${assetNames[type]}`;
+    descEl.innerText = `Sahkan protokol perolehan ${amount} unit dengan nilai RM ${cost.toLocaleString()}? Aset akan didaftarkan secara kekal dalam ledger anda.`;
+
+    // Tunjukkan Modal dengan Animasi Smooth
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.add('opacity-100');
+        modalContent.classList.remove('scale-95');
+        modalContent.classList.add('scale-100');
+    }, 10);
+
+    // Tunggu Respon Pengguna (Promise)
+    return new Promise((resolve) => {
+        btnConfirm.onclick = () => {
+            closeProtocolModal();
+            executeTransaction(type, amount, cost);
+            resolve(true);
+        };
+        btnCancel.onclick = () => {
+            closeProtocolModal();
+            resolve(false);
+        };
+    });
+}
+
+// 4a. Fungsi Tutup Modal
+function closeProtocolModal() {
+    const modal = document.getElementById('protocol-modal');
+    const modalContent = document.getElementById('protocol-modal-content');
+    
+    modal.classList.remove('opacity-100');
+    modalContent.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 500);
+}
+
+// 4b. Fungsi Pelaksanaan Transaksi
+function executeTransaction(type, amount, cost) {
+    // Kemaskini Data
+    userAssets[type] += amount;
+    userAssets.dividends += (cost * 0.001); // Bonus 0.1%
+    saveAssets();
+    
+    // Kemaskini UI secara real-time
+    renderLedgerView();
+    
+    console.log(`[ES-RFS] Transaction Secured: ${type} augmented.`);
 }
 
 // 5. Fungsi Reset (Untuk Testing)
@@ -64,7 +109,6 @@ function resetSovereignNode() {
 function updateTickerUI() {
     const ticker = document.getElementById('profit-ticker');
     if (ticker) {
-        // Update menggunakan format RM (2026 Sovereign Standard)
         ticker.innerText = `RM ${userAssets.dividends.toFixed(4)}`;
     }
 }
@@ -126,11 +170,9 @@ function renderLedgerView() {
                     </svg>
                 </div>
                 <div class="text-[8px] text-gray-400 uppercase tracking-[0.3em] mb-1 font-bold">Total Community Profit (MYR)</div>
-                
                 <div id="profit-ticker" class="text-3xl font-light text-white font-mono tracking-tighter">
                     RM ${userAssets.dividends.toFixed(4)}
                 </div>
-                
                 <div class="flex items-center gap-2 mt-4">
                     <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
                     <div class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest">Sovereign Yield Active</div>
