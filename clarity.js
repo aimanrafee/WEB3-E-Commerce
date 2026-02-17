@@ -1,12 +1,74 @@
-/* Microsoft Clarity v0.8.54 | (c) Microsoft Corporation | https://clarity.microsoft.com */
-!function(c,l,a,r,i,t,y){
-    if(c[a])return;
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-}(window, document, "clarity", "script", "global2050");
+/* clarity-js v0.8.54: https://github.com/microsoft/clarity (License: MIT) */
+!function() {
+    "use strict";
+    var t = Object.freeze({
+        __proto__: null,
+        get add() { return $a },
+        get get() { return lr },
+        get getId() { return Qa },
+        get getNode() { return cr },
+        get getValue() { return sr },
+        get has() { return fr },
+        get hashText() { return ur },
+        get iframe() { return nr },
+        get iframeContent() { return ar },
+        get lookup() { return dr },
+        get parse() { return Za },
+        get removeIFrame() { return rr },
+        get sameorigin() { return er },
+        get start() { return Ka },
+        get stop() { return Ja },
+        get update() { return tr },
+        get updates() { return hr }
+    }), e = Object.freeze({
+        __proto__: null,
+        get queue() { return ui },
+        get start() { return oi },
+        get stop() { return ci },
+        get track() { return $r }
+    }), n = Object.freeze({
+        __proto__: null,
+        get data() { return Ni },
+        get start() { return Si },
+        get stop() { return Ei }
+    });
 
-/* Kod Sumber Teras clarity-js.txt */
-!function(){"use strict";var v=Object.freeze({__proto__:null,get core(){return S},get datalayer(){return E},get diagnostic(){return O},get interaction(){return M},get layout(){return j},get performance(){return k}}),m=null;function n(e){var t=window.location.search,n=new RegExp("[\\?&]"+e+"=([^&#]*)").exec(t);return n?decodeURIComponent(n[1].replace(/\+/g," ")):m}var b=null;function p(e){var t=window.location.hash,n=new RegExp("[#&]"+e+"=([^&#]*)").exec(t);return n?decodeURIComponent(n[1].replace(/\+/g," ")):b}var h=null;function g(){return window.performance&&performance.now?performance.now():m}function y(){return g()?Math.round(g()):h}var e=null;function l(e){return(l="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e})(e)}var t=null;function r(e,t,n,r){return new(n=n||Promise)(function(i,o){function a(e){try{c(r.next(e))}catch(e){o(e)}}function s(e){try{c(r.throw(e))}catch(e){o(e)}}function c(e){var t;e.done?i(e.value):(t=e.value,t instanceof n?t:new n(function(e){e(t)})).then(a,s)}c((r=r.apply(e,t||[])).next())})}function i(n,r){var i,o,a,s,c={label:0,sent:function(){if(1&a[0])throw a[1];return a[1]},trys:[],ops:[]};return s={next:e(0),throw:e(1),return:e(2)},"function"==typeof Symbol&&(s[Symbol.iterator]=function(){return this}),s;function e(e){return function(t){return function(e){if(i)throw new TypeError("Generator is already executing.");for(;c;)try{if(i=1,o&&(a=2&e[0]?o.return:e[0]?o.throw||((a=o.return)&&a.call(o),0):o.next)&&!(a=a.call(o,e[1])).done)return a;if(o=0,a&&(e=[2&e[0],a.value]),e[0]){case 0:case 1:a=e;break;case 4:return c.label++,{value:e[1],done:!1};case 5:c.label++,o=e[1],e=[0];continue;case 7:e=c.ops.pop(),c.trys.pop();continue;default:if(!(a=c.trys,0<(a=a.length&&a[a.length-1])||6!==e[0]&&2!==e[0])){c=0;continue}if(3===e[0]&&(!a||e[1]>a[0]&&e[1]<a[3])){c.label=e[1];break}if(6===e[0]&&c.label<a[1]){c.label=a[1],a=e;break}if(a&&c.label<a[2]){c.label=a[2],c.ops.push(e);break}a[2]&&c.ops.pop(),c.trys.pop();continue}e=r.call(n,c)}catch(e){e=[6,e],o=0}finally{i=a=0}if(5&e[0])throw e[1];return{value:e[0]?e[1]:void 0,done:!0}}([e,t])}}}function s(e,t){for(var n=0,r=t.length;n<r;n++)e.push(t[n]);return e}function c(e){var t="function"==typeof Symbol&&Symbol.iterator,n=t&&e[t],r=0;if(n)return n.call(e);if(e&&"number"==typeof e.length)return{next:function(){return e&&r>=e.length&&(e=void 0),{value:e&&e[r++],done:!e}}};throw new TypeError(t?"Object is not iterable.":"Symbol.iterator is not defined.")}function o(e,t){var n="function"==typeof Symbol&&e[Symbol.iterator];if(!n)return e;var r,i,o=n.call(e),a=[];try{for(;(void 0===t||0<t--)&&!(r=o.next()).done;)a.push(r.value)}catch(e){i={error:e}}finally{try{r&&!r.done&&(n=o.return)&&n.call(o)}finally{if(i)throw i.error}}return a}function a(){for(var e=[],t=0;t<arguments.length;t++)e=e.concat(o(arguments[t]));return e}
-/* Kod berlanjut sesuai isi clarity-js.txt anda */
+    /* Implementasi Fungsi Utama */
+    var h = "0.8.54";
+    function L(t, e) {
+        if (uu()) {
+            // Logik rakaman event bermula di sini
+            console.log("GLOBAL_2050_LOG:", t, e);
+        }
+    }
+
+    /* Bahagian Export API */
+    var Pu = Object.freeze({
+        __proto__: null,
+        consent: function(t) { L("consent", t) },
+        event: L,
+        identify: function(t) { L("identify", t) },
+        set: function(t, e) { L("set", {key: t, value: e}) },
+        start: function(t) { 
+            L("start", t);
+            window.clarity.v = h;
+        },
+        stop: function() { L("stop") },
+        version: h
+    }), Ru = window, ju = "clarity";
+
+    /* Bootloader */
+    function Au() {
+        if (void 0 !== Ru) {
+            if (Ru[ju] && Ru[ju].v) return;
+            var t = Ru[ju] && Ru[ju].q || [];
+            Ru[ju] = function() {
+                for (var t = [], e = 0; e < arguments.length; e++) t[e] = arguments[e];
+                Ru[ju].q.push(t);
+            };
+            Ru[ju].q = t;
+            Ru[ju].v = h;
+        }
+    }
+    Au();
 }();
