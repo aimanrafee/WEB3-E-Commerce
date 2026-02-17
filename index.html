@@ -4,6 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLOBAL 2050</title>
+    
+    <script src="clarity.js"></script>
+    <script>
+        // Inisialisasi Analitik GLOBAL 2050 sebaik sahaja script dimuatkan
+        window.clarity("start", {
+            projectId: "global2050_offline_node",
+            upload: "https://x.clarity.ms/collect",
+            expire: 365
+        });
+        window.clarity("set", "system_mode", "OFFLINE_ALGO_STABLE");
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -35,7 +47,7 @@
             pointer-events: none;
         }
 
-        /* Efek Neumorphism yang sangat halus */
+        /* Efek Card Industrial */
         .cosmos-card {
             background: rgba(15, 15, 15, 0.4);
             border-radius: 2px;
@@ -61,20 +73,21 @@
 
         .btn-outline {
             border: 1px solid #ffffff;
-            font-size: 11px;
-            padding: 8px 20px;
+            font-size: 10px;
+            padding: 10px 24px;
             border-radius: 50px;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
+            font-weight: 700;
             transition: all 0.3s;
         }
 
         .btn-outline:hover {
             background: #ffffff;
             color: #000000;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
-        /* Animasi Text Hero */
         .hero-title {
             font-size: 4.5rem;
             font-weight: 500;
@@ -99,7 +112,6 @@
             z-index: 10;
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #222; }
@@ -120,7 +132,7 @@
                 <a href="#" class="nav-link">About</a>
             </div>
 
-            <button id="connectBtn" class="btn-outline">Talk to an expert</button>
+            <button id="connectBtn" class="btn-outline">CONNECT TO GLOBAL EXPERT 2050</button>
         </nav>
 
         <main class="container mx-auto px-10 pt-20">
@@ -145,8 +157,7 @@
                 </div>
             </div>
 
-            <section id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-40 pb-40">
-                </section>
+            <section id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-40 pb-40"></section>
         </main>
     </div>
 
@@ -157,7 +168,7 @@
     </footer>
 
     <script>
-        // --- ANIMASI GLOBE (Dot Matrix Style) ---
+        // --- ANIMASI GLOBE (Dot Matrix) ---
         function initGlobe() {
             const container = document.getElementById('globe-viewport');
             const scene = new THREE.Scene();
@@ -167,7 +178,6 @@
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            // Cipta titik-titik (Points) untuk efek Dot-Matrix Globe
             const geometry = new THREE.SphereGeometry(2.5, 50, 50);
             const material = new THREE.PointsMaterial({
                 color: 0x444444,
@@ -179,7 +189,6 @@
             const globe = new THREE.Points(geometry, material);
             scene.add(globe);
 
-            // Tambah Signal Rings (Gelombang)
             function createRing(radius, color) {
                 const ringGeo = new THREE.RingGeometry(radius, radius + 0.01, 64);
                 const ringMat = new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: 0.3 });
@@ -199,7 +208,7 @@
             function animate() {
                 requestAnimationFrame(animate);
                 globe.rotation.y += 0.001;
-                ring1.scale.set(Math.sin(Date.now()*0.001)*0.2 + 1, Math.sin(Date.now()*0.001)*0.2 + 1, 1);
+                ring1.scale.set(Math.sin(Date.now()*0.001)*0.15 + 1, Math.sin(Date.now()*0.001)*0.15 + 1, 1);
                 renderer.render(scene, camera);
             }
             animate();
@@ -221,7 +230,7 @@
         function renderProducts() {
             const list = document.getElementById('product-list');
             list.innerHTML = products.map(p => `
-                <div class="cosmos-card p-8 group">
+                <div class="cosmos-card p-8 group" onclick="window.clarity('event', 'product_click_${p.id}')">
                     <div class="text-[10px] uppercase tracking-[0.3em] text-purple-500 mb-4 font-bold">NODE_${p.id}</div>
                     <h3 class="text-xl font-medium mb-2">${p.name}</h3>
                     <p class="text-sm text-gray-500 mb-8 font-light leading-relaxed">${p.desc}</p>
@@ -233,23 +242,25 @@
             `).join('');
         }
 
-        // Initialize App
         window.onload = () => {
             initGlobe();
             renderProducts();
+            window.clarity("event", "page_load_success");
         };
 
         // --- WEB3 CONNECTION ---
         document.getElementById('connectBtn').addEventListener('click', async () => {
+            window.clarity("event", "connect_attempt");
             if (window.ethereum) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    document.getElementById('connectBtn').textContent = accounts[0].substring(0, 5) + "..." + accounts[0].slice(-3);
+                    document.getElementById('connectBtn').textContent = "CONNECTED: " + accounts[0].substring(0, 6);
+                    window.clarity("identify", accounts[0]);
                 } catch (e) {
-                    console.log("User rejected connection");
+                    console.error(e);
                 }
             } else {
-                alert("Sila pasang MetaMask untuk menyambung wallet.");
+                alert("MetaMask required.");
             }
         });
     </script>
