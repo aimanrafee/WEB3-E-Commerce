@@ -1,7 +1,7 @@
 /**
  * GLOBAL 2050 - SOVEREIGN ASSET ENGINE
  * Fokus: Logik Ekonomi, Penyimpanan Data LocalStorage, & MYR Currency.
- * Versi: 1.0.5 (Async Modal Integration)
+ * Versi: 1.0.6 (Encryption Phase & Processing Integration)
  */
 
 // 1. Inisialisasi Data dari LocalStorage
@@ -15,9 +15,11 @@ let userAssets = JSON.parse(localStorage.getItem('es_rfs_assets')) || {
 
 // 2. Real-time Profit Ticker (Simulasi Pertumbuhan Dividen)
 setInterval(() => {
+    // Kadar keuntungan simulasi: Gold (5%) + Land (15%)
     const profitRate = (userAssets.gold * 0.05) + (userAssets.land * 0.15);
     
     if (profitRate > 0) {
+        // Simulasi profit per saat
         userAssets.dividends += (profitRate / 3600); 
         saveAssets();
         updateTickerUI();
@@ -29,7 +31,7 @@ function saveAssets() {
     localStorage.setItem('es_rfs_assets', JSON.stringify(userAssets));
 }
 
-// 4. Fungsi Pembelian Aset Versi Smooth Embedded UI (Async)
+// 4. Fungsi Pembelian Aset dengan Fasa Enkripsi & Loading
 async function purchaseAsset(type, amount, cost) {
     const assetNames = {
         'gold': 'Gold Bullion LOT',
@@ -45,7 +47,10 @@ async function purchaseAsset(type, amount, cost) {
 
     if (!modal || !modalContent) return;
 
-    // Set Maklumat Transaksi ke dalam Modal
+    // Reset rupa modal sekiranya ada kesan transaksi sebelumnya
+    btnConfirm.style.display = 'block';
+    btnCancel.style.display = 'block';
+
     titleEl.innerText = `Perolehan ${assetNames[type]}`;
     descEl.innerText = `Sahkan protokol perolehan ${amount} unit dengan nilai RM ${cost.toLocaleString()}? Aset akan didaftarkan secara kekal dalam ledger anda.`;
 
@@ -57,13 +62,34 @@ async function purchaseAsset(type, amount, cost) {
         modalContent.classList.add('scale-100');
     }, 10);
 
-    // Tunggu Respon Pengguna (Promise)
     return new Promise((resolve) => {
-        btnConfirm.onclick = () => {
+        btnConfirm.onclick = async () => {
+            // --- FASA START: ENCRYPTION LOADING ---
+            btnConfirm.style.display = 'none';
+            btnCancel.style.display = 'none';
+            
+            titleEl.innerHTML = `<span class="animate-pulse text-emerald-500">Encrypting Node...</span>`;
+            
+            // Simulasi proses algoritma 2050
+            const steps = [
+                "Hashing RWA Metadata...", 
+                "Securing Private Key...", 
+                "Finalizing Offline Ledger...",
+                "Node Synchronization Complete."
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                descEl.innerText = steps[i];
+                // Kesan bunyi bip boleh ditambah di sini jika mahu
+                await new Promise(r => setTimeout(r, 800)); 
+            }
+            
+            // --- FASA END: EXECUTION ---
             closeProtocolModal();
             executeTransaction(type, amount, cost);
             resolve(true);
         };
+        
         btnCancel.onclick = () => {
             closeProtocolModal();
             resolve(false);
@@ -83,23 +109,29 @@ function closeProtocolModal() {
     }, 500);
 }
 
-// 4b. Fungsi Pelaksanaan Transaksi
+// 4b. Fungsi Pelaksanaan Transaksi (Backend Logic)
 function executeTransaction(type, amount, cost) {
-    // Kemaskini Data
+    // Kemaskini Data Aset
     userAssets[type] += amount;
-    userAssets.dividends += (cost * 0.001); // Bonus 0.1%
+    userAssets.dividends += (cost * 0.001); // Bonus permulaan 0.1%
     saveAssets();
     
     // Kemaskini UI secara real-time
     renderLedgerView();
     
-    console.log(`[ES-RFS] Transaction Secured: ${type} augmented.`);
+    console.log("%c[SYSTEM] Node Synchronization Complete.", "color: #10b981; font-weight: bold;");
 }
 
-// 5. Fungsi Reset (Untuk Testing)
+// 5. Fungsi Reset Node (Fungsi Keselamatan)
 function resetSovereignNode() {
     if (confirm("AMARAN: Ini akan memadam semua rekod aset dalam Node ini. Teruskan?")) {
-        userAssets = { gold: 0, land: 0, carbon_credits: 0, dividends: 0.0, last_update: Date.now() };
+        userAssets = { 
+            gold: 0, 
+            land: 0, 
+            carbon_credits: 0, 
+            dividends: 0.0, 
+            last_update: Date.now() 
+        };
         saveAssets();
         renderLedgerView();
     }
@@ -113,7 +145,7 @@ function updateTickerUI() {
     }
 }
 
-// 7. Fungsi Render Utama UI Ledger
+// 7. Fungsi Render Utama UI Ledger (Sidebar Dynamic Content)
 function renderLedgerView() {
     const content = document.getElementById('sidebar-dynamic-content');
     if (!content) return;
