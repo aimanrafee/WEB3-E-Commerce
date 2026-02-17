@@ -7,7 +7,6 @@
     
     <script src="clarity.js"></script>
     <script>
-        // Inisialisasi Analitik GLOBAL 2050 sebaik sahaja script dimuatkan
         window.clarity("start", {
             projectId: "global2050_offline_node",
             upload: "https://x.clarity.ms/collect",
@@ -36,7 +35,6 @@
             overflow-x: hidden;
         }
 
-        /* Container untuk animasi Globe di sebelah kanan */
         #globe-viewport {
             position: fixed;
             top: 0;
@@ -47,7 +45,6 @@
             pointer-events: none;
         }
 
-        /* Efek Card Industrial */
         .cosmos-card {
             background: rgba(15, 15, 15, 0.4);
             border-radius: 2px;
@@ -71,7 +68,9 @@
 
         .nav-link:hover { color: #ffffff; }
 
+        /* Gaya Butang (Diterapkan pada Tag <a>) */
         .btn-outline {
+            display: inline-block;
             border: 1px solid #ffffff;
             font-size: 10px;
             padding: 10px 24px;
@@ -80,11 +79,14 @@
             letter-spacing: 0.12em;
             font-weight: 700;
             transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
         }
 
         .btn-outline:hover {
             background: #ffffff;
-            color: #000000;
+            color: #000000 !important;
             box-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
@@ -132,7 +134,9 @@
                 <a href="#" class="nav-link">About</a>
             </div>
 
-            <button id="connectBtn" class="btn-outline">CONNECT TO GLOBAL EXPERT 2050</button>
+            <a href="https://t.me/globalexperts2050" target="_blank" id="connectBtn" class="btn-outline" onclick="window.clarity('event', 'telegram_expert_click')">
+                CONNECT TO GLOBAL EXPERT 2050
+            </a>
         </nav>
 
         <main class="container mx-auto px-10 pt-20">
@@ -247,22 +251,6 @@
             renderProducts();
             window.clarity("event", "page_load_success");
         };
-
-        // --- WEB3 CONNECTION ---
-        document.getElementById('connectBtn').addEventListener('click', async () => {
-            window.clarity("event", "connect_attempt");
-            if (window.ethereum) {
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    document.getElementById('connectBtn').textContent = "CONNECTED: " + accounts[0].substring(0, 6);
-                    window.clarity("identify", accounts[0]);
-                } catch (e) {
-                    console.error(e);
-                }
-            } else {
-                alert("MetaMask required.");
-            }
-        });
     </script>
 </body>
 </html>
