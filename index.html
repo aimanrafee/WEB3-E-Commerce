@@ -21,7 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="bg-black text-white font-['Space_Grotesk'] overflow-x-hidden">
 
     <div class="vignette-overlay"></div>
     <div id="globe-viewport"></div>
@@ -35,62 +35,68 @@
                 <div id="step-R" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
                 <div id="step-FS" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
             </div>
-            <div id="auth-msg" class="text-white text-xs font-light tracking-[0.2em] h-8 uppercase">Securing Ethical Compass...</div>
+            <div id="auth-msg" class="text-white text-xs font-light tracking-[0.2em] h-8 uppercase text-center">Securing Ethical Compass...</div>
         </div>
     </div>
 
     <div id="sovereign-sidebar">
-        <div class="sidebar-close" onclick="closeSidebar()">[ Close Session ]</div>
-        <div id="sidebar-dynamic-content"></div>
+        <div class="sidebar-close" onclick="closeSidebar()">[ Tutup Sesi ]</div>
+        <div id="sidebar-dynamic-content">
+            </div>
     </div>
 
     <div class="content-overlay">
-        <nav class="flex justify-between items-center px-12 py-10 reveal">
-            <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal">2050</span></div>
+        <nav class="flex justify-between items-center px-6 md:px-12 py-10 reveal">
+            <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal opacity-50">2050</span></div>
             
-            <div class="hidden md:flex gap-12">
-                <a onclick="openSidebar('ETHICAL')" class="nav-link">ES-RFS Protocol</a>
-                <a onclick="openSidebar('STANDALONE')" class="nav-link">Sovereign Nodes</a>
-                <a onclick="openSidebar('SOVEREIGN')" class="nav-link text-emerald-500">View RWA Ledger</a>
-                <a onclick="openSidebar('REGEN')" class="nav-link">Natural Capital</a>
+            <div class="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-widest">
+                <a onclick="openSidebar('ETHICAL')" class="nav-link cursor-pointer">ES-RFS Protocol</a>
+                <a onclick="openSidebar('STANDALONE')" class="nav-link cursor-pointer">Sovereign Nodes</a>
+                <a onclick="openSidebar('SOVEREIGN')" class="nav-link text-emerald-500 cursor-pointer">View RWA Ledger</a>
+                <a onclick="openSidebar('REGEN')" class="nav-link cursor-pointer">Natural Capital</a>
             </div>
 
             <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">CONNECT</a>
         </nav>
 
-        <main class="container mx-auto px-12 pt-24">
+        <main class="container mx-auto px-6 md:px-12 pt-24">
             <div class="max-w-3xl">
                 <div class="es-rfs-badge reveal">Authorized ES-RFS Standard</div>
                 <h1 class="hero-title mb-10 reveal delay-1">Ethical. Stand-alone.<br>Regenerative Future.</h1>
-                <p class="text-gray-400 text-xl mb-14 max-w-xl leading-relaxed font-light reveal delay-2">
+                <p class="text-gray-400 text-lg md:text-xl mb-14 max-w-xl leading-relaxed font-light reveal delay-2">
                     Beroperasi di bawah protokol kedaulatan <span class="text-white">ES-RFS</span>. Sistem operasi mandiri yang mengawal aset dunia nyata dan memulihkan ekosistem tanpa pergantungan pusat.
                 </p>
 
-                <div class="flex gap-6 mb-24 reveal delay-3">
+                <div class="flex flex-col md:flex-row gap-6 mb-24 reveal delay-3">
                     <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Sovereign Node</button>
-                    <button onclick="openSidebar('SOVEREIGN')" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Ledger</button>
+                    <button onclick="openSidebar('SOVEREIGN')" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all text-white">Sistem Ledger</button>
                 </div>
 
                 <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
-                    <div><span class="stats-highlight">PROTOCOL</span> ES-RFS v1.0</div>
-                    <div><span class="stats-highlight">STABILITY</span> 100% OFFLINE</div>
-                    <div><span class="stats-highlight">ENCRYPTION</span> SOVEREIGN LEVEL</div>
+                    <div><span class="stats-highlight text-white">PROTOCOL</span> ES-RFS v1.0</div>
+                    <div><span class="stats-highlight text-white">STABILITY</span> 100% OFFLINE</div>
+                    <div><span class="stats-highlight text-white">CURRENCY</span> MYR NATIVE</div>
                 </div>
             </div>
 
-            <section id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-48 pb-48"></section>
+            <section id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-48 pb-48">
+                </section>
         </main>
     </div>
 
-    <footer class="fixed bottom-0 w-full p-5 border-t border-white/5 bg-black/90 backdrop-blur-xl z-50 flex justify-around text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
-        <div class="flex items-center gap-2">
+    <footer class="fixed bottom-0 w-full p-5 border-t border-white/5 bg-black/90 backdrop-blur-xl z-50 flex flex-col md:flex-row justify-around text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
+        <div class="flex items-center justify-center gap-2 mb-2 md:mb-0">
             <span class="text-white/30">PROTOCOL:</span> 
             <span class="text-white tracking-[0.4em] font-bold">ES-RFS SOVEREIGN</span>
         </div>
-        <div class="text-white flex items-center gap-3">
-            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> STATUS: STAND-ALONE_ACTIVE
+        <div class="text-white flex items-center justify-center gap-3">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
+            STATUS: <span class="font-bold">STAND-ALONE_ACTIVE (MYR)</span>
         </div>
     </footer>
 
-    <script src="sovereign-engine.js"></script> <script src="main.js"></script>             </body>
+    <script src="sovereign-engine.js"></script> 
+    <script src="main.js"></script>
+
+</body>
 </html>
