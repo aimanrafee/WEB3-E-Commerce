@@ -1,0 +1,155 @@
+:root {
+    --bg-deep: #000000;
+    --accent-green: #10b981;
+    --accent-blue: #3b82f6;
+    --text-dim: #888888;
+    --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+    background-color: var(--bg-deep);
+    font-family: 'Space Grotesk', sans-serif;
+    color: #ffffff;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.vignette-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(0,0,0,0.9) 100%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+#globe-viewport {
+    position: fixed;
+    top: 0; right: -5%;
+    width: 55%; height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s var(--ease-premium), transform 1.2s var(--ease-premium);
+}
+
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+.cosmos-card {
+    background: rgba(10, 10, 10, 0.3);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    transition: all 0.6s var(--ease-premium);
+    cursor: pointer;
+}
+
+.cosmos-card:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(20, 20, 20, 0.5);
+    transform: translateY(-8px);
+}
+
+.nav-link {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    transition: color 0.4s var(--ease-premium);
+    cursor: pointer;
+}
+
+.nav-link:hover { color: #ffffff; }
+
+.btn-outline {
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 10px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+    transition: all 0.4s var(--ease-premium);
+    color: white;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background: #ffffff;
+    color: #000000 !important;
+    box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+
+.stats-highlight { color: #ffffff; font-weight: 700; margin-right: 6px; }
+
+.es-rfs-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* --- SOVEREIGN MULTI-SIDEBAR --- */
+#sovereign-sidebar {
+    position: fixed;
+    right: 0; top: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 400px;
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(40px);
+    z-index: 90;
+    border-left: 1px solid rgba(255,255,255,0.05);
+    transform: translateX(100%);
+    transition: transform 0.8s var(--ease-premium);
+    padding: 3rem;
+    overflow-y: auto;
+}
+
+#sovereign-sidebar.open { transform: translateX(0); }
+
+.sidebar-close {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.3);
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: inline-block;
+}
+.sidebar-close:hover { color: white; }
+
+/* Efek Glow untuk Logo PNG (Langkah Tambahan) */
+.shadow-glow {
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+    transition: filter 0.4s ease;
+}
+
+.cosmos-card:hover .shadow-glow {
+    filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8));
+}
+
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: #333; }
