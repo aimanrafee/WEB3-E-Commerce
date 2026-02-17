@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 E-Commerce 2050 OS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <style>
+        .offline-mode { filter: grayscale(0.5); border-top: 4px solid #ef4444; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+
+    <nav class="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900 sticky top-0 z-50">
+        <h1 class="text-2xl font-bold tracking-tighter text-blue-400">OS_OFFLINE_2050 v1.0</h1>
+        <div class="flex gap-4">
+            <span id="status" class="px-3 py-1 rounded-full text-xs bg-green-500 text-black font-bold uppercase">Online</span>
+            <button id="connectBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-all font-semibold">
+                Sambung Wallet
+            </button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        <header class="mb-10 text-center">
+            <h2 class="text-4xl font-extrabold mb-2">Desentralisasi E-Commerce</h2>
+            <p class="text-gray-400">Algoritma Pintar • Transaksi Tanpa Sempadan • Simpanan Offline</p>
+        </header>
+
+        <section id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
+            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
+            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
+        </section>
+    </main>
+
+    <footer class="fixed bottom-0 w-full p-4 bg-black text-[10px] text-gray-500 flex justify-around">
+        <div>OFFLINE STORAGE: <span id="storage-status">READY</span></div>
+        <div>ALGO_VERSION: 2050_ALPHA</div>
+        <div>BLOCKCHAIN: ETH_WEB3</div>
+    </footer>
+
+    <script>
+        // --- 1. DETEKSI OFFLINE (Langkah ke arah Offline OS) ---
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+
+        function updateStatus() {
+            const statusEl = document.getElementById('status');
+            if (navigator.onLine) {
+                statusEl.textContent = "Online";
+                statusEl.className = "px-3 py-1 rounded-full text-xs bg-green-500 text-black font-bold";
+                document.body.classList.remove('offline-mode');
+            } else {
+                statusEl.textContent = "Offline Mode";
+                statusEl.className = "px-3 py-1 rounded-full text-xs bg-red-500 text-white font-bold";
+                document.body.classList.add('offline-mode');
+            }
+        }
+
+        // --- 2. WEB3 CONNECTIVITY ---
+        const connectBtn = document.getElementById('connectBtn');
+        connectBtn.addEventListener('click', async () => {
+            if (window.ethereum) {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    connectBtn.textContent = accounts[0].substring(0,6) + "..." + accounts[0].slice(-4);
+                    connectBtn.classList.replace('bg-blue-600', 'bg-green-600');
+                } catch (err) {
+                    console.error("User menolak sambungan");
+                }
+            } else {
+                alert("Sila pasang MetaMask untuk fungsi Web3!");
+            }
+        });
+
+        // --- 3. SMART ALGORITHM (SIMULASI PENGAMBILAN DATA) ---
+        // Dalam visi 2050 anda, data ini akan diambil dari Local IndexDB jika offline
+        const products = [
+            { id: 1, name: "Neural Link Chip", price: "0.5 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Neural+Link" },
+            { id: 2, name: "Quantum Processor", price: "1.2 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Quantum+CPU" },
+            { id: 3, name: "Holographic Display", price: "0.8 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Hologram" }
+        ];
+
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = products.map(p => `
+                <div class="bg-gray-800 border border-gray-700 p-4 rounded-2xl hover:border-blue-500 transition-all group">
+                    <img src="${p.img}" alt="${p.name}" class="rounded-xl mb-4 w-full object-cover h-40">
+                    <h3 class="text-xl font-bold mb-2">${p.name}</h3>
+                    <div class="flex justify-between items-center">
+                        <span class="text-blue-400 font-mono">${p.price}</span>
+                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm font-bold group-hover:bg-blue-400 transition-colors">Beli</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Jalankan render selepas 1 saat (simulasi loading algo)
+        setTimeout(renderProducts, 1000);
+    </script>
+</body>
+</html>
