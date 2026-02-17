@@ -4,6 +4,7 @@
  */
 
 // --- DATA SIDEBAR (Static Data) ---
+// Semua nilai di sini adalah untuk tujuan paparan maklumat sahaja.
 const SIDEBAR_DATA = {
     'ETHICAL': {
         title: 'ES-RFS Protocol',
@@ -11,13 +12,13 @@ const SIDEBAR_DATA = {
         body: `
             <p class="text-gray-400 text-sm leading-relaxed mb-8">Manual protokol kedaulatan digital yang mengutamakan privasi mutlak dan integritas data tanpa pihak ketiga.</p>
             <div class="space-y-4">
-                <div class="p-4 bg-white/5 border-l-2 border-emerald-500">
+                <div class="p-4 bg-white/5 border-l-2 border-emerald-500 rounded-r">
                     <div class="text-[10px] font-bold text-emerald-500 mb-1 uppercase">Moral compass</div>
-                    <div class="text-xs text-gray-300">Algoritma yang menapis transaksi berdasarkan impak etika.</div>
+                    <div class="text-xs text-gray-300 font-light">Algoritma yang menapis transaksi berdasarkan impak etika global.</div>
                 </div>
-                <div class="p-4 bg-white/5 border-l-2 border-blue-500">
+                <div class="p-4 bg-white/5 border-l-2 border-blue-500 rounded-r">
                     <div class="text-[10px] font-bold text-blue-500 mb-1 uppercase">Data Sovereignty</div>
-                    <div class="text-xs text-gray-300">Setiap bait data dimiliki sepenuhnya oleh pemilik Node.</div>
+                    <div class="text-xs text-gray-300 font-light">Setiap bait data disimpan secara offline dalam storan biometrik anda.</div>
                 </div>
             </div>`
     },
@@ -26,37 +27,37 @@ const SIDEBAR_DATA = {
         badge: 'Network Infrastructure',
         body: `
             <div class="mb-8">
-                <div class="text-[10px] text-gray-500 uppercase mb-4 tracking-widest">Active Global Nodes</div>
-                <div class="flex justify-between items-center py-3 border-b border-white/5">
+                <div class="text-[10px] text-gray-500 uppercase mb-4 tracking-widest font-bold">Active Local Nodes</div>
+                <div class="flex justify-between items-center py-3 border-b border-white/5 font-mono">
                     <span class="text-xs">Node_KL_Primary</span>
-                    <span class="text-[10px] text-emerald-500">ONLINE</span>
+                    <span class="text-[10px] text-emerald-500 animate-pulse">ONLINE</span>
                 </div>
-                <div class="flex justify-between items-center py-3 border-b border-white/5">
+                <div class="flex justify-between items-center py-3 border-b border-white/5 font-mono">
                     <span class="text-xs">Node_Borneo_Safe</span>
-                    <span class="text-[10px] text-emerald-500">ONLINE</span>
+                    <span class="text-[10px] text-emerald-500 animate-pulse">ONLINE</span>
                 </div>
             </div>
-            <div class="p-6 bg-blue-500/10 border border-blue-500/20 text-center rounded-lg">
-                <div class="text-xs uppercase mb-1 text-blue-400 font-bold">Local Mesh Network</div>
-                <div class="text-2xl font-bold text-white">100% SECURE</div>
+            <div class="p-6 bg-blue-500/10 border border-blue-500/20 text-center rounded-lg shadow-inner">
+                <div class="text-[9px] uppercase mb-1 text-blue-400 font-black tracking-[0.2em]">Local Mesh Network</div>
+                <div class="text-2xl font-bold text-white tracking-tighter">100% SECURE</div>
             </div>`
     },
     'REGEN': {
         title: 'Natural Capital',
         badge: 'Regenerative Metrics',
         body: `
-            <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 mb-6 text-center rounded-lg">
-                <div class="text-4xl font-light mb-2 text-white font-mono">14,204</div>
+            <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 mb-6 text-center rounded-xl">
+                <div class="text-4xl font-light mb-2 text-white font-mono tracking-tighter">14,204</div>
                 <div class="text-[9px] text-emerald-500 tracking-[0.3em] font-bold uppercase">Carbon Credits Restored</div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 bg-white/5 text-center rounded border border-white/5">
-                    <div class="text-lg text-white">82%</div>
-                    <div class="text-[8px] text-gray-500 uppercase font-bold">Biodiversity</div>
+                <div class="p-4 bg-white/5 text-center rounded-lg border border-white/5">
+                    <div class="text-lg text-white font-mono">82%</div>
+                    <div class="text-[8px] text-gray-500 uppercase font-black">Biodiversity</div>
                 </div>
-                <div class="p-4 bg-white/5 text-center rounded border border-white/5">
-                    <div class="text-lg text-white">12.5k</div>
-                    <div class="text-[8px] text-gray-500 uppercase font-bold">Water Purity</div>
+                <div class="p-4 bg-white/5 text-center rounded-lg border border-white/5">
+                    <div class="text-lg text-white font-mono">12.5k</div>
+                    <div class="text-[8px] text-gray-500 uppercase font-black">Water Purity</div>
                 </div>
             </div>`
     }
@@ -69,16 +70,19 @@ function openSidebar(key) {
     
     if (!sidebar || !content) return;
 
+    // Reset scroll position
+    content.scrollTop = 0;
+
     if (key === 'SOVEREIGN' && typeof renderLedgerView === 'function') {
-        // Panggil logik kewangan dari sovereign-engine.js
+        // Logik Ledger dalam sovereign-engine.js pastikan tiada simbol $
         renderLedgerView();
     } else {
         const data = SIDEBAR_DATA[key];
         if (data) {
             content.innerHTML = `
-                <div class="mb-12 animate-in fade-in slide-in-from-right-4 duration-500">
+                <div class="mb-12 animate-in fade-in slide-in-from-right-4 duration-700">
                     <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-bold mb-4 uppercase">${data.badge}</div>
-                    <h2 class="text-3xl font-medium tracking-tighter text-white">${data.title}</h2>
+                    <h2 class="text-3xl font-medium tracking-tighter text-white leading-none">${data.title}</h2>
                     <div class="mt-8">${data.body}</div>
                 </div>
             `;
@@ -106,10 +110,10 @@ async function activateNode(nodeId) {
         const stepEl = document.getElementById(`step-${s}`);
         
         if (msgEl) msgEl.innerText = `Establishing ${s} Protocol...`;
-        await new Promise(r => setTimeout(r, 800));
+        await new Promise(r => setTimeout(r, 600)); // Laju sikit untuk UX
         
         if (stepEl) {
-            stepEl.classList.add('bg-emerald-500', 'border-emerald-500', 'shadow-[0_0_15px_rgba(16,185,129,0.6)]');
+            stepEl.classList.add('bg-emerald-500', 'border-emerald-500', 'shadow-[0_0_20px_rgba(16,185,129,0.8)]');
         }
     }
 
@@ -117,10 +121,9 @@ async function activateNode(nodeId) {
         modal.classList.remove('opacity-100');
         setTimeout(() => {
             modal.classList.add('hidden');
-            // Buka Ledger secara automatik selepas pengaktifan
             openSidebar('SOVEREIGN');
-        }, 700);
-    }, 1000);
+        }, 500);
+    }, 800);
 }
 
 // --- THREE.JS GLOBE (Visual Background) ---
@@ -136,25 +139,26 @@ function initGlobe() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // Glob menggunakan warna Emerald untuk tema MYR Berdaulat
+    // Glob menggunakan warna Emerald Glow
     const globe = new THREE.Points(
-        new THREE.SphereGeometry(2.5, 64, 64),
+        new THREE.SphereGeometry(2.8, 80, 80),
         new THREE.PointsMaterial({ 
             color: 0x10b981, 
-            size: 0.015, 
+            size: 0.012, 
             transparent: true, 
-            opacity: 0.35 
+            opacity: 0.4,
+            blending: THREE.AdditiveBlending
         })
     );
     scene.add(globe);
     
-    camera.position.z = 7; 
-    camera.position.x = 1.2;
+    camera.position.z = 8; 
+    camera.position.x = 1.5;
 
     function animate() {
         requestAnimationFrame(animate);
-        globe.rotation.y += 0.0008;
-        globe.rotation.x += 0.0002;
+        globe.rotation.y += 0.0005;
+        globe.rotation.z += 0.0001;
         renderer.render(scene, camera);
     }
     animate();
@@ -168,10 +172,10 @@ function initGlobe() {
 
 // --- RENDER PILLARS (Home Cards) ---
 const pillars = [
-    { id: "ETHICAL", name: "Ethical Algo", img: "assets/logo-ethical.png", fallback: "⚖️", desc: "Kompas moral digital. Melindungi data dan privasi mutlak pengguna." },
-    { id: "STANDALONE", name: "Stand-alone OS", img: "assets/logo-os.png", fallback: "📱", desc: "Operasi 100% offline. Kedaulatan penuh tanpa Cloud pusat." },
-    { id: "REGEN", name: "Regenerative", img: "assets/logo-regen.png", fallback: "🌿", desc: "Algoritma pemulihan alam. Menukar impak hijau kepada nilai ekonomi." },
-    { id: "SOVEREIGN", name: "Sovereign RWA", img: "assets/logo-rwa.png", fallback: "🔐", desc: "Pengurusan aset dunia nyata (MYR) yang sah dan berdaulat." }
+    { id: "ETHICAL", name: "Ethical Algo", img: "assets/logo-ethical.png", fallback: "⚖️", desc: "Kompas moral digital. Menapis transaksi berdasarkan impak etika mutlak." },
+    { id: "STANDALONE", name: "Stand-alone OS", img: "assets/logo-os.png", fallback: "📱", desc: "Operasi 100% offline. Kedaulatan penuh tanpa Cloud atau pihak ketiga." },
+    { id: "REGEN", name: "Regenerative", img: "assets/logo-regen.png", fallback: "🌿", desc: "Sistem pemulihan alam. Menukar impak hijau kepada nilai ekonomi MYR." },
+    { id: "SOVEREIGN", name: "Sovereign RWA", img: "assets/logo-rwa.png", fallback: "🔐", desc: "Pengurusan aset dunia nyata (MYR) yang disahkan melalui protokol ES-RFS." }
 ];
 
 // --- SYSTEM INITIALIZATION ---
@@ -181,30 +185,29 @@ window.onload = () => {
     const productList = document.getElementById('product-list');
     if (productList) {
         productList.innerHTML = pillars.map((p, i) => `
-            <div onclick="openSidebar('${p.id}')" class="cosmos-card p-10 group reveal delay-${i+1} cursor-pointer">
-                <div class="mb-6 h-12 w-12 opacity-80 group-hover:opacity-100 transition-all duration-500 group-hover:scale-110">
-                     <img src="${p.img}" alt="${p.name}" class="w-full h-full object-contain shadow-glow" 
-                          onerror="this.outerHTML='<div class=\'text-3xl\'>${p.fallback}</div>'">
+            <div onclick="openSidebar('${p.id}')" class="cosmos-card p-10 group reveal delay-${i+1} cursor-pointer hover:bg-white/[0.02] transition-all duration-500 border border-transparent hover:border-white/10 rounded-2xl">
+                <div class="mb-8 h-14 w-14 opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                     <img src="${p.img}" alt="${p.name}" class="w-full h-full object-contain" 
+                          onerror="this.outerHTML='<div class=\'text-4xl\'>${p.fallback}</div>'">
                 </div>
                 
-                <div class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 mb-3 font-bold">ES-RFS_${p.id}</div>
-                <h3 class="text-xl font-medium mb-4 text-white">${p.name}</h3>
-                <p class="text-xs text-gray-500 mb-10 font-light leading-relaxed h-12">${p.desc}</p>
-                <div class="pt-8 border-t border-white/5 text-[9px] text-gray-400 font-bold uppercase tracking-widest group-hover:text-emerald-500 transition-colors">
-                    Akses Unit MYR
+                <div class="text-[10px] uppercase tracking-[0.5em] text-emerald-500 mb-4 font-black">NODE_${p.id}</div>
+                <h3 class="text-2xl font-medium mb-4 text-white tracking-tight">${p.name}</h3>
+                <p class="text-[13px] text-gray-500 mb-12 font-light leading-relaxed h-12 overflow-hidden">${p.desc}</p>
+                
+                <div class="pt-8 border-t border-white/5 flex items-center justify-between group-hover:border-emerald-500/30 transition-colors">
+                    <span class="text-[9px] text-gray-500 font-bold uppercase tracking-widest group-hover:text-emerald-500">Akses Unit MYR</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-600 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+                    </svg>
                 </div>
             </div>
         `).join('');
     }
     
-    // Intersection Observer untuk animasi reveal
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => { 
-            if (e.isIntersecting) {
-                e.target.classList.add('active');
-            }
-        });
-    }, { threshold: 0.1 });
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+    }, { threshold: 0.15 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 };
