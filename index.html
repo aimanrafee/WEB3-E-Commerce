@@ -133,6 +133,15 @@
             text-transform: uppercase;
         }
 
+        /* RWA Ledger Drawer Styles */
+        #ledger-drawer {
+            transform: translateX(100%);
+            transition: transform 0.8s var(--ease-premium);
+        }
+        #ledger-drawer.open {
+            transform: translateX(0);
+        }
+
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
@@ -161,6 +170,19 @@
         </div>
     </div>
 
+    <div id="ledger-drawer" class="fixed right-0 top-0 h-full w-full md:w-96 bg-black/80 backdrop-blur-3xl z-[80] border-l border-white/10 p-12 overflow-y-auto">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-xs uppercase tracking-[0.4em] font-bold text-emerald-500">RWA Ledger</h2>
+            <button onclick="toggleLedger()" class="text-white/40 hover:text-white text-[9px] uppercase tracking-widest">Close</button>
+        </div>
+        <div id="ledger-content">
+            </div>
+        <div class="mt-12 p-6 border border-white/5 rounded bg-white/5">
+            <div class="text-[8px] text-gray-500 uppercase tracking-widest mb-2">Total Node Value</div>
+            <div class="text-2xl font-light">$4,250,000.00</div>
+        </div>
+    </div>
+
     <div class="content-overlay">
         <nav class="flex justify-between items-center px-12 py-10 reveal">
             <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal">2050</span></div>
@@ -168,7 +190,7 @@
             <div class="hidden md:flex gap-12">
                 <a href="#" class="nav-link">ES-RFS Protocol</a>
                 <a href="#" class="nav-link">Sovereign Nodes</a>
-                <a href="#" class="nav-link">RWA Ledger</a>
+                <a href="#" onclick="toggleLedger()" class="nav-link text-emerald-500">View RWA Ledger</a>
                 <a href="#" class="nav-link">Natural Capital</a>
             </div>
 
@@ -189,7 +211,7 @@
 
                 <div class="flex gap-6 mb-24 reveal delay-3">
                     <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Sovereign Node</button>
-                    <button class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Blueprint</button>
+                    <button onclick="toggleLedger()" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">Sistem Ledger</button>
                 </div>
 
                 <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
@@ -216,6 +238,30 @@
     </footer>
 
     <script>
+        // --- LOGIK RWA LEDGER ---
+        const SOVEREIGN_ASSETS = [
+            { type: 'GOLD_BULLION', value: '1.2kg', status: 'VERIFIED', location: 'Local Vault' },
+            { type: 'NATURAL_LAND', value: '4.5 Hectares', status: 'REGENERATING', location: 'Borneo Sector' },
+            { type: 'CLEAN_WATER_RIGHTS', value: '500k Liters/yr', status: 'ACTIVE', location: 'Highland Node' }
+        ];
+
+        function showLedger() {
+            const list = document.getElementById('ledger-content');
+            list.innerHTML = SOVEREIGN_ASSETS.map(asset => `
+                <div class="border-l border-emerald-500 pl-4 py-4 bg-emerald-500/5 mb-4 group hover:bg-emerald-500/10 transition-all">
+                    <div class="text-[8px] text-emerald-500 tracking-widest font-bold mb-1">${asset.type}</div>
+                    <div class="text-lg font-medium text-white">${asset.value}</div>
+                    <div class="text-[9px] text-gray-500 uppercase tracking-tighter mt-1">${asset.status} • ${asset.location}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLedger() {
+            const drawer = document.getElementById('ledger-drawer');
+            drawer.classList.toggle('open');
+            if(drawer.classList.contains('open')) showLedger();
+        }
+
         // --- ES-RFS SOVEREIGN AUTHENTICATION SEQUENCE ---
         async function activateNode(nodeId) {
             const modal = document.getElementById('auth-modal');
@@ -229,16 +275,12 @@
                 'FS': 'Sovereignty Established'
             };
 
-            // Reset UI
             steps.forEach(s => document.getElementById(`step-${s}`).className = 'w-10 h-1 border border-white/10 transition-all duration-700');
             status.innerText = "Initiating ES-RFS Protocol";
-            status.className = "text-[10px] uppercase tracking-[0.6em] text-emerald-500 mb-10 font-bold";
 
-            // Show Modal
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.add('opacity-100'), 10);
 
-            // Sequence Loop
             for (let s of steps) {
                 msg.innerText = `Establishing ${s}...`;
                 await new Promise(r => setTimeout(r, 1000)); 
@@ -254,7 +296,10 @@
             
             setTimeout(() => {
                 modal.classList.remove('opacity-100');
-                setTimeout(() => modal.classList.add('hidden'), 700);
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    toggleLedger(); // Buka Ledger secara automatik selepas verify
+                }, 700);
             }, 2500);
         }
 
