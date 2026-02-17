@@ -1,6 +1,7 @@
 /**
  * GLOBAL 2050 - SOVEREIGN ASSET ENGINE
  * Fokus: Logik Ekonomi, Penyimpanan Data LocalStorage, & MYR Currency.
+ * Versi: 1.0.4 (Full MYR Integration)
  */
 
 // 1. Inisialisasi Data dari LocalStorage
@@ -15,9 +16,12 @@ let userAssets = JSON.parse(localStorage.getItem('es_rfs_assets')) || {
 // 2. Real-time Profit Ticker (Simulasi Pertumbuhan Dividen)
 // Aset yang dimiliki akan menghasilkan profit kecil secara automatik setiap saat
 setInterval(() => {
+    // Kadar keuntungan: Gold (5%) + Land (15%)
     const profitRate = (userAssets.gold * 0.05) + (userAssets.land * 0.15);
+    
     if (profitRate > 0) {
-        userAssets.dividends += (profitRate / 3600); // Simulasi profit per saat
+        // Simulasi profit per saat: Kadar tahunan dibahagi dengan 3600 (untuk simulasi pantas)
+        userAssets.dividends += (profitRate / 3600); 
         saveAssets();
         updateTickerUI();
     }
@@ -38,7 +42,7 @@ function purchaseAsset(type, amount, cost) {
     if (confirm(`Sahkan protokol perolehan ${amount} unit ${assetNames[type]} dengan nilai RM ${cost.toLocaleString()}?`)) {
         userAssets[type] += amount;
         
-        // Bonus permulaan apabila membeli
+        // Bonus permulaan segera (0.1% daripada nilai pembelian)
         userAssets.dividends += (cost * 0.001); 
         
         saveAssets();
@@ -56,10 +60,11 @@ function resetSovereignNode() {
     }
 }
 
-// 6. Kemaskini Paparan Dividen Sahaja
+// 6. Kemaskini Paparan Dividen Sahaja (Bahagian Ticker)
 function updateTickerUI() {
     const ticker = document.getElementById('profit-ticker');
     if (ticker) {
+        // Update menggunakan format RM (2026 Sovereign Standard)
         ticker.innerText = `RM ${userAssets.dividends.toFixed(4)}`;
     }
 }
@@ -73,7 +78,7 @@ function renderLedgerView() {
         <div data-type="ledger-view" class="animate-in fade-in slide-in-from-right-5 duration-700">
             <div class="mb-10">
                 <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-bold mb-4 uppercase">Asset Management</div>
-                <h2 class="text-3xl font-medium tracking-tighter text-white">Sovereign Ledger</h2>
+                <h2 class="text-3xl font-medium tracking-tighter text-white leading-none">Sovereign Ledger</h2>
             </div>
             
             <div class="space-y-4 mb-8">
@@ -121,9 +126,11 @@ function renderLedgerView() {
                     </svg>
                 </div>
                 <div class="text-[8px] text-gray-400 uppercase tracking-[0.3em] mb-1 font-bold">Total Community Profit (MYR)</div>
+                
                 <div id="profit-ticker" class="text-3xl font-light text-white font-mono tracking-tighter">
                     RM ${userAssets.dividends.toFixed(4)}
                 </div>
+                
                 <div class="flex items-center gap-2 mt-4">
                     <div class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
                     <div class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest">Sovereign Yield Active</div>
