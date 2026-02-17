@@ -3,102 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web3 E-Commerce 2050 OS</title>
+    <title>Web3 E-Commerce | OS_OFFLINE_2050</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        .offline-mode { filter: grayscale(0.5); border-top: 4px solid #ef4444; }
+        :root {
+            --bg-color: #0d0e12;
+            --card-bg: #16171d;
+            --cosmos-purple: #7042f8;
+            --neumo-shadow: 10px 10px 20px #050507, -5px -5px 15px #1b1d25;
+            --neumo-inset: inset 2px 2px 5px #050507, inset -2px -2px 5px #1b1d25;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #1a1b26, #0d0e12);
+            font-family: 'Inter', sans-serif;
+            color: #e2e8f0;
+        }
+
+        .neumorphic-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--neumo-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .neumorphic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 15px 15px 30px #050507, -5px -5px 20px #22252e;
+            border-color: var(--cosmos-purple);
+        }
+
+        .neumorphic-btn {
+            background: var(--card-bg);
+            box-shadow: var(--neumo-shadow);
+            transition: all 0.2s;
+        }
+
+        .neumorphic-btn:active {
+            box-shadow: var(--neumo-inset);
+            transform: scale(0.98);
+        }
+
+        .cosmos-gradient-text {
+            background: linear-gradient(90deg, #fff, #7042f8, #00d2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .offline-mode { filter: hue-rotate(90deg) grayscale(0.4); }
+        
+        /* Animasi Glow ala Cosmos */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(112, 66, 248, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(112, 66, 248, 0.5); }
+            100% { box-shadow: 0 0 5px rgba(112, 66, 248, 0.2); }
+        }
+        .active-status { animation: pulse-glow 2s infinite; }
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="min-h-screen pb-20">
 
-    <nav class="p-6 border-b border-gray-800 flex justify-between items-center bg-gray-900 sticky top-0 z-50">
-        <h1 class="text-2xl font-bold tracking-tighter text-blue-400">OS_OFFLINE_2050 v1.0</h1>
-        <div class="flex gap-4">
-            <span id="status" class="px-3 py-1 rounded-full text-xs bg-green-500 text-black font-bold uppercase">Online</span>
-            <button id="connectBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition-all font-semibold">
-                Sambung Wallet
+    <nav class="p-6 flex justify-between items-center backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-blue-400"></div>
+            <h1 class="text-xl font-extrabold tracking-widest uppercase">OS_OFFLINE<span class="text-purple-500">2050</span></h1>
+        </div>
+        <div class="flex items-center gap-6">
+            <div id="status-container" class="flex items-center gap-2 px-4 py-2 rounded-full neumorphic-btn">
+                <div id="status-dot" class="w-2 h-2 rounded-full bg-green-500 active-status"></div>
+                <span id="status-text" class="text-[10px] font-bold tracking-widest uppercase">Network Live</span>
+            </div>
+            <button id="connectBtn" class="neumorphic-btn px-6 py-2 rounded-full text-sm font-semibold hover:text-purple-400 transition-colors">
+                Connect Wallet
             </button>
         </div>
     </nav>
 
-    <main class="container mx-auto p-6">
-        <header class="mb-10 text-center">
-            <h2 class="text-4xl font-extrabold mb-2">Desentralisasi E-Commerce</h2>
-            <p class="text-gray-400">Algoritma Pintar • Transaksi Tanpa Sempadan • Simpanan Offline</p>
+    <main class="container mx-auto px-6 pt-16">
+        <header class="mb-20 text-center">
+            <h2 class="text-6xl font-extrabold mb-6 cosmos-gradient-text tracking-tighter">The Interchain Market.</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
+                Algoritma Luar Talian Pintar • Kedaulatan Data Ekonomi • <span class="text-purple-400">Powered by Cosmos Architecture</span>
+            </p>
         </header>
 
-        <section id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
-            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
-            <div class="animate-pulse bg-gray-800 h-64 rounded-xl"></div>
+        <section id="product-list" class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+            <div class="h-80 neumorphic-card animate-pulse"></div>
+            <div class="h-80 neumorphic-card animate-pulse"></div>
+            <div class="h-80 neumorphic-card animate-pulse"></div>
         </section>
     </main>
 
-    <footer class="fixed bottom-0 w-full p-4 bg-black text-[10px] text-gray-500 flex justify-around">
-        <div>OFFLINE STORAGE: <span id="storage-status">READY</span></div>
-        <div>ALGO_VERSION: 2050_ALPHA</div>
-        <div>BLOCKCHAIN: ETH_WEB3</div>
+    <footer class="fixed bottom-0 w-full p-4 bg-[#0d0e12]/80 backdrop-blur-lg border-t border-white/5 text-[10px] text-gray-500 flex justify-around items-center font-mono uppercase tracking-widest">
+        <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+            Storage: <span id="storage-status" class="text-white ml-1">Optimized</span>
+        </div>
+        <div>Kernel: v1.0.4-Solid</div>
+        <div class="text-purple-500">Algorithm: Smart_Sync_2050</div>
     </footer>
 
     <script>
-        // --- 1. DETEKSI OFFLINE (Langkah ke arah Offline OS) ---
+        // --- 1. OFFLINE ENGINE ---
         window.addEventListener('online', updateStatus);
         window.addEventListener('offline', updateStatus);
 
         function updateStatus() {
-            const statusEl = document.getElementById('status');
+            const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
             if (navigator.onLine) {
-                statusEl.textContent = "Online";
-                statusEl.className = "px-3 py-1 rounded-full text-xs bg-green-500 text-black font-bold";
+                statusText.textContent = "Network Live";
+                statusDot.className = "w-2 h-2 rounded-full bg-green-500 active-status";
                 document.body.classList.remove('offline-mode');
             } else {
-                statusEl.textContent = "Offline Mode";
-                statusEl.className = "px-3 py-1 rounded-full text-xs bg-red-500 text-white font-bold";
+                statusText.textContent = "Offline Mode";
+                statusDot.className = "w-2 h-2 rounded-full bg-red-500";
                 document.body.classList.add('offline-mode');
             }
         }
 
-        // --- 2. WEB3 CONNECTIVITY ---
+        // --- 2. WEB3 HANDLER ---
         const connectBtn = document.getElementById('connectBtn');
         connectBtn.addEventListener('click', async () => {
             if (window.ethereum) {
                 try {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    connectBtn.textContent = accounts[0].substring(0,6) + "..." + accounts[0].slice(-4);
-                    connectBtn.classList.replace('bg-blue-600', 'bg-green-600');
+                    connectBtn.innerHTML = `<span class="text-green-400">${accounts[0].substring(0,6)}...${accounts[0].slice(-4)}</span>`;
                 } catch (err) {
-                    console.error("User menolak sambungan");
+                    console.log("Connection Rejected");
                 }
             } else {
-                alert("Sila pasang MetaMask untuk fungsi Web3!");
+                alert("MetaMask Required");
             }
         });
 
-        // --- 3. SMART ALGORITHM (SIMULASI PENGAMBILAN DATA) ---
-        // Dalam visi 2050 anda, data ini akan diambil dari Local IndexDB jika offline
+        // --- 3. COSMOS DATA ALGORITHM ---
         const products = [
-            { id: 1, name: "Neural Link Chip", price: "0.5 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Neural+Link" },
-            { id: 2, name: "Quantum Processor", price: "1.2 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Quantum+CPU" },
-            { id: 3, name: "Holographic Display", price: "0.8 ETH", img: "https://via.placeholder.com/300x200/1e293b/fff?text=Hologram" }
+            { id: 1, name: "Neural Link Node", price: "0.5 ATOM", img: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=400" },
+            { id: 2, name: "Quantum Relay", price: "1.2 ATOM", img: "https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&q=80&w=400" },
+            { id: 3, name: "Plasma Display", price: "0.8 ATOM", img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" }
         ];
 
         function renderProducts() {
             const list = document.getElementById('product-list');
             list.innerHTML = products.map(p => `
-                <div class="bg-gray-800 border border-gray-700 p-4 rounded-2xl hover:border-blue-500 transition-all group">
-                    <img src="${p.img}" alt="${p.name}" class="rounded-xl mb-4 w-full object-cover h-40">
-                    <h3 class="text-xl font-bold mb-2">${p.name}</h3>
+                <div class="neumorphic-card p-6 group">
+                    <div class="overflow-hidden rounded-2xl mb-6 shadow-inner">
+                        <img src="${p.img}" alt="${p.name}" class="w-full object-cover h-48 group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <h3 class="text-xl font-bold mb-1 tracking-tight">${p.name}</h3>
+                    <p class="text-xs text-gray-500 mb-6 uppercase tracking-widest">Certified Hardware</p>
                     <div class="flex justify-between items-center">
-                        <span class="text-blue-400 font-mono">${p.price}</span>
-                        <button class="bg-white text-black px-4 py-1 rounded-full text-sm font-bold group-hover:bg-blue-400 transition-colors">Beli</button>
+                        <span class="text-purple-400 font-mono text-lg font-bold">${p.price}</span>
+                        <button class="neumorphic-btn px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-tighter hover:text-white transition-all">
+                            Initialize
+                        </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Jalankan render selepas 1 saat (simulasi loading algo)
-        setTimeout(renderProducts, 1000);
+        setTimeout(renderProducts, 1200);
     </script>
 </body>
 </html>
