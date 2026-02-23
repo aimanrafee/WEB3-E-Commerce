@@ -85,6 +85,9 @@ const SIDEBAR_DATA = {
                         <div class="bg-yellow-500 h-full w-[65%]"></div>
                     </div>
                 </div>
+                <button onclick="if(window.renderLedgerView) renderLedgerView()" class="w-full py-3 bg-emerald-500 text-black text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all">
+                    Buka Ledger Aset
+                </button>
             </div>`
     }
 };
@@ -133,7 +136,7 @@ async function executeSovereignAction(type, payload = {}) {
     }
 }
 
-// --- 5. INDIVIDUAL BUTTON ACTIONS (MANUAL) ---
+// --- 5. INDIVIDUAL BUTTON ACTIONS ---
 function sendTransaction() {
     const to = prompt("Masukkan Alamat VRT Penerima:");
     const amount = prompt("Jumlah untuk dihantar:");
@@ -181,7 +184,6 @@ async function verifyAndActivate() {
         localStorage.setItem('vrt_address', temporaryAddress);
         localStorage.setItem('vrt_seed', temporarySeed);
         
-        // Daftar ke Ubuntu Node
         try {
             await fetch(`${LOCAL_NODE_IP}/api/register-wallet`, {
                 method: 'POST',
@@ -216,20 +218,25 @@ async function syncWalletData() {
         const balEl = document.getElementById('wallet-balance-github');
         if (balEl) balEl.innerText = data.balance.toFixed(8);
         
-        const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
-        statusEls.forEach(el => {
-            el.innerText = "NODE ONLINE | ES-RFS SECURE";
-            el.className = "text-emerald-500 font-bold uppercase tracking-tighter";
-        });
+        updateNodeStatus(true);
         isNodeOnline = true;
     } catch (e) {
-        const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
-        statusEls.forEach(el => {
-            el.innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
-            el.className = "text-red-500 font-bold uppercase tracking-tighter";
-        });
+        updateNodeStatus(false);
         isNodeOnline = false;
     }
+}
+
+function updateNodeStatus(online) {
+    const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
+    statusEls.forEach(el => {
+        if (online) {
+            el.innerText = "NODE ONLINE | ES-RFS SECURE";
+            el.className = "text-emerald-500 font-bold uppercase tracking-tighter";
+        } else {
+            el.innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
+            el.className = "text-red-500 font-bold uppercase tracking-tighter";
+        }
+    });
 }
 
 // --- 7. VISUALS: THREE.JS GLOBE & STARFIELD ---
@@ -243,6 +250,7 @@ function initVisuals() {
     camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
     // Add Stars
@@ -288,9 +296,18 @@ function initVisuals() {
 
 // --- 8. INITIALIZATION & NAVIGATION ---
 window.onload = () => {
-    console.log(`System Booting... v${SYSTEM_VERSION}`);
+    console.log(`%c[SYSTEM] Booting Global 2050... v${SYSTEM_VERSION}`, "color: #10b981; font-weight: bold;");
     initVisuals();
     
+    // Intersection Observer for Reveal Animation
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
     // Auto-sync every 5 seconds
     setInterval(syncWalletData, 5000);
 
