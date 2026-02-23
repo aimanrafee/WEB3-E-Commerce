@@ -4,7 +4,7 @@
  */
 
 // --- LABEL: GITHUB PAGES - CONNECTION CONFIG ---
-const LOCAL_NODE_IP = "http://http://192.168.8.102:3000/"; 
+const LOCAL_NODE_IP = "http://http://192.168.8.102:3000"; 
 
 // --- DATA SIDEBAR (Static Data) ---
 const SIDEBAR_DATA = {
