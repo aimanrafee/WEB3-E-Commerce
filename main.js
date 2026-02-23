@@ -127,6 +127,9 @@ async function executeSovereignAction(type, payload = {}) {
         if (result.success) {
             alert(`✅ PROTOKOL BERJAYA: ${type}\n\nTransaction Hash: ${result.txHash || 'SECURE_OFFLINE_LOG'}`);
             syncWalletData(); 
+            
+            // KEMASKINI: Memanggil semula senarai produk selepas transaksi berjaya
+            if (window.renderProducts) window.renderProducts(); 
         } else {
             alert(`❌ RALAT NODE: ${result.message || result.error}`);
         }
