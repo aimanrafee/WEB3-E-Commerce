@@ -19,7 +19,7 @@ setInterval(() => {
     const profitRate = (userAssets.gold * 0.05) + (userAssets.land * 0.15);
     
     if (profitRate > 0) {
-        // Simulasi profit per saat
+        // Simulasi profit per saat (dibahagi 3600 untuk kadar sejam)
         userAssets.dividends += (profitRate / 3600); 
         saveAssets();
         updateTickerUI();
@@ -38,6 +38,7 @@ async function purchaseAsset(type, amount, cost) {
         'land': 'Regenerative Land Sector'
     };
 
+    // Pastikan modal wujud dalam index.html (Sila pastikan elemen ini ada)
     const modal = document.getElementById('protocol-modal');
     const modalContent = document.getElementById('protocol-modal-content');
     const titleEl = document.getElementById('protocol-title');
@@ -45,7 +46,13 @@ async function purchaseAsset(type, amount, cost) {
     const btnConfirm = document.getElementById('protocol-confirm');
     const btnCancel = document.getElementById('protocol-cancel');
 
-    if (!modal || !modalContent) return;
+    // Jika modal tiada (fallback ke prompt asas jika developer lupa letak modal HTML)
+    if (!modal) {
+        if (confirm(`Sahkan perolehan ${amount} unit ${assetNames[type]} dengan nilai RM ${cost.toLocaleString()}?`)) {
+            executeTransaction(type, amount, cost);
+        }
+        return;
+    }
 
     // Reset rupa modal sekiranya ada kesan transaksi sebelumnya
     btnConfirm.style.display = 'block';
@@ -54,12 +61,12 @@ async function purchaseAsset(type, amount, cost) {
     titleEl.innerText = `Perolehan ${assetNames[type]}`;
     descEl.innerText = `Sahkan protokol perolehan ${amount} unit dengan nilai RM ${cost.toLocaleString()}? Aset akan didaftarkan secara kekal dalam ledger anda.`;
 
-    // Tunjukkan Modal dengan Animasi Smooth
+    // Tunjukkan Modal dengan Animasi
     modal.classList.remove('hidden');
     setTimeout(() => {
         modal.classList.add('opacity-100');
-        modalContent.classList.remove('scale-95');
-        modalContent.classList.add('scale-100');
+        modalContent?.classList.remove('scale-95');
+        modalContent?.classList.add('scale-100');
     }, 10);
 
     return new Promise((resolve) => {
@@ -70,7 +77,7 @@ async function purchaseAsset(type, amount, cost) {
             
             titleEl.innerHTML = `<span class="animate-pulse text-emerald-500">Encrypting Node...</span>`;
             
-            // Simulasi proses algoritma 2050
+            // Simulasi proses algoritma PQC 2050
             const steps = [
                 "Hashing RWA Metadata...", 
                 "Securing Private Key...", 
@@ -80,7 +87,6 @@ async function purchaseAsset(type, amount, cost) {
 
             for (let i = 0; i < steps.length; i++) {
                 descEl.innerText = steps[i];
-                // Kesan bunyi bip boleh ditambah di sini jika mahu
                 await new Promise(r => setTimeout(r, 800)); 
             }
             
@@ -102,8 +108,9 @@ function closeProtocolModal() {
     const modal = document.getElementById('protocol-modal');
     const modalContent = document.getElementById('protocol-modal-content');
     
+    if (!modal) return;
     modal.classList.remove('opacity-100');
-    modalContent.classList.add('scale-95');
+    modalContent?.classList.add('scale-95');
     setTimeout(() => {
         modal.classList.add('hidden');
     }, 500);
@@ -113,18 +120,19 @@ function closeProtocolModal() {
 function executeTransaction(type, amount, cost) {
     // Kemaskini Data Aset
     userAssets[type] += amount;
-    userAssets.dividends += (cost * 0.001); // Bonus permulaan 0.1%
+    userAssets.dividends += (cost * 0.001); // Bonus permulaan 0.1% dari nilai belian
     saveAssets();
     
     // Kemaskini UI secara real-time
     renderLedgerView();
+    syncWithMainUI(); // Fungsi tambahan untuk sync ke wallet-balance-github
     
     console.log("%c[SYSTEM] Node Synchronization Complete.", "color: #10b981; font-weight: bold;");
 }
 
 // 5. Fungsi Reset Node (Fungsi Keselamatan)
 function resetSovereignNode() {
-    if (confirm("AMARAN: Ini akan memadam semua rekod aset dalam Node ini. Teruskan?")) {
+    if (confirm("AMARAN: Ini akan memadam semua rekod aset dalam Node ini secara kekal. Teruskan?")) {
         userAssets = { 
             gold: 0, 
             land: 0, 
@@ -134,15 +142,27 @@ function resetSovereignNode() {
         };
         saveAssets();
         renderLedgerView();
+        syncWithMainUI();
     }
 }
 
-// 6. Kemaskini Paparan Dividen Sahaja (Bahagian Ticker)
+// 6. Kemaskini Paparan Dividen
 function updateTickerUI() {
     const ticker = document.getElementById('profit-ticker');
     if (ticker) {
         ticker.innerText = `RM ${userAssets.dividends.toFixed(4)}`;
     }
+    // Sync baki ke wallet utama di dashboard
+    const mainBal = document.getElementById('wallet-balance-github');
+    if (mainBal) {
+        mainBal.innerText = userAssets.dividends.toFixed(8);
+    }
+}
+
+// Helper: Sync data ledger ke UI utama di main.js
+function syncWithMainUI() {
+    const balEl = document.getElementById('wallet-balance-github');
+    if (balEl) balEl.innerText = userAssets.dividends.toFixed(8);
 }
 
 // 7. Fungsi Render Utama UI Ledger (Sidebar Dynamic Content)
@@ -162,7 +182,7 @@ function renderLedgerView() {
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <div class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Physical Gold (RWA)</div>
-                            <div class="text-xl font-medium text-white">${userAssets.gold} <span class="text-[10px] text-gray-400">UNIT</span></div>
+                            <div class="text-xl font-medium text-white">${userAssets.gold.toFixed(2)} <span class="text-[10px] text-gray-400">UNIT</span></div>
                         </div>
                         <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,7 +200,7 @@ function renderLedgerView() {
                     <div class="flex justify-between items-start mb-4">
                         <div>
                             <div class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Regen Land Capital</div>
-                            <div class="text-xl font-medium text-white">${userAssets.land} <span class="text-[10px] text-gray-400">HEKTAR</span></div>
+                            <div class="text-xl font-medium text-white">${userAssets.land.toFixed(2)} <span class="text-[10px] text-gray-400">HEKTAR</span></div>
                         </div>
                         <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
