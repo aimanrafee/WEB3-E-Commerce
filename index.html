@@ -1,210 +1,180 @@
-/**
- * GLOBAL 2050 - SOVEREIGN OS SYSTEM LOGIC
- * Version: Solid-2050.Build.01 (Ultimate Edition)
- * INTEGRATED WITH: index.html (ES-RFS Standard)
- */
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOBAL 2050 | ES-RFS Sovereign OS</title>
+    
+    <link rel="stylesheet" href="style.css">
 
-// --- 1. GLOBAL CONFIGURATIONS ---
-const LOCAL_NODE_IP = "http://192.168.8.102:3000";
-const SYSTEM_VERSION = "2050.SOLID";
-let temporarySeed = ""; 
-let temporaryAddress = "";
-let isNodeOnline = false;
+    <script src="clarity.js"></script>
+    <script>
+        window.clarity = window.clarity || function() { (window.clarity.q = window.clarity.q || []).push(arguments) };
+        window.clarity("start", {
+            projectId: "global2050_offline_node",
+            upload: "https://collect.clarity.ms/collect",
+            expire: 365
+        });
+        window.clarity("set", "system_mode", "ES-RFS_SOVEREIGN_ALGO");
+    </script>
 
-// --- 2. EXTENDED SIDEBAR DATA ---
-const SIDEBAR_DATA = {
-    'ETHICAL': {
-        title: 'ES-RFS: Ethical Algorithm',
-        badge: 'Moral Core',
-        body: `
-            <div class="space-y-6">
-                <p class="text-gray-400 text-sm leading-relaxed">Protokol Etika 2050 menetapkan piawaian di mana setiap transaksi ditapis melalui 'Moral Compass' digital.</p>
-                <div class="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
-                    <h4 class="text-xs font-bold text-emerald-500 mb-2 uppercase">Proof of Impact (PoI)</h4>
-                    <p class="text-[11px] text-gray-400">Hanya transaksi yang memberikan impak positif kepada ekosistem sosial dibenarkan melepasi lapisan konsensus.</p>
-                </div>
-            </div>`
-    },
-    'STANDALONE': {
-        title: 'Sovereign Stand-alone OS',
-        badge: 'Infrastructure',
-        body: `
-            <div class="space-y-6">
-                <div class="flex justify-between items-center p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                    <div>
-                        <div class="text-[10px] text-blue-400 font-black uppercase">Mesh Status</div>
-                        <div class="text-xl font-mono text-white">OFFLINE-FIRST</div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white font-['Space_Grotesk'] overflow-x-hidden">
+
+    <div class="vignette-overlay"></div>
+    <div id="globe-viewport"></div>
+
+    <div id="auth-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-2xl hidden opacity-0 transition-opacity duration-700">
+        <div class="text-center max-w-md p-10">
+            <div id="auth-status" class="text-[10px] uppercase tracking-[0.6em] text-emerald-500 mb-10 font-bold">Initiating ES-RFS Protocol</div>
+            <div class="flex justify-center gap-6 mb-12">
+                <div id="step-E" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
+                <div id="step-S" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
+                <div id="step-R" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
+                <div id="step-FS" class="w-10 h-1 border border-white/10 transition-all duration-700"></div>
+            </div>
+            <div id="auth-msg" class="text-white text-xs font-light tracking-[0.2em] h-8 uppercase text-center">Securing Ethical Compass...</div>
+        </div>
+    </div>
+
+    <div id="sovereign-sidebar">
+        <div class="sidebar-close" onclick="closeSidebar()" style="cursor: pointer; padding: 20px; text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-all">[ Tutup Sesi ]</div>
+        <div id="sidebar-dynamic-content"></div>
+    </div>
+
+    <div class="content-overlay">
+        <nav class="flex justify-between items-center px-6 md:px-12 py-10 reveal">
+            <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal opacity-50">2050</span></div>
+            
+            <div class="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-widest">
+                <a onclick="openSidebar('ETHICAL')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">ES-RFS Protocol</a>
+                <a onclick="openSidebar('STANDALONE')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Sovereign Nodes</a>
+                <a onclick="openSidebar('REGEN')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Natural Capital</a>
+            </div>
+
+            <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline text-[10px] tracking-widest px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all">CONNECT</a>
+        </nav>
+
+        <main class="container mx-auto px-6 md:px-12 pt-12 md:pt-24">
+            <div class="max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <div class="es-rfs-badge reveal inline-block px-4 py-1 border border-emerald-500/30 text-emerald-500 text-[9px] font-bold tracking-widest rounded-full mb-6 uppercase bg-emerald-500/5">Authorized ES-RFS Standard</div>
+                    <h1 class="hero-title text-5xl md:text-7xl font-medium tracking-tighter mb-8 reveal delay-1 leading-[0.9]">Ethical.<br>Stand-alone.<br>Regenerative.</h1>
+                    <p class="text-gray-400 text-lg mb-10 max-w-sm leading-relaxed font-light reveal delay-2">
+                        Beroperasi di bawah protokol <span class="text-white">ES-RFS</span>. Sistem mandiri untuk mengawal aset RWA secara berdaulat.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 reveal delay-3">
+                        <button onclick="createNewSovereignWallet()" class="bg-white text-black px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">
+                            Aktifkan Node
+                        </button>
                     </div>
-                    <div class="h-3 w-3 bg-blue-500 animate-ping rounded-full"></div>
                 </div>
-                <p class="text-gray-400 text-xs">Sistem operasi ini berfungsi 100% tanpa internet melalui Local Mesh Hub.</p>
-            </div>`
-    },
-    'REGEN': {
-        title: 'Regenerative Economics',
-        badge: 'Natural Capital',
-        body: `
-            <div class="space-y-6">
-                <div class="p-6 bg-gradient-to-br from-emerald-600/20 to-transparent border border-emerald-500/20 rounded-2xl text-center">
-                    <div class="text-4xl font-light text-white mb-2 tracking-tighter">14,204</div>
-                    <div class="text-[9px] text-emerald-500 font-black uppercase tracking-widest">Carbon Credits Restored</div>
+
+                <div class="flex flex-col gap-8 reveal delay-3">
+                    <div class="bg-emerald-500/5 border border-emerald-500/20 p-8 rounded-3xl backdrop-blur-xl relative overflow-hidden group w-full max-w-sm ml-auto">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:rotate-12 transition-transform">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-emerald-500">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+
+                        <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-black mb-4 uppercase">Yield Engine Active</div>
+                        
+                        <div class="text-4xl font-mono font-bold tracking-tighter text-white mb-2">
+                            <span id="wallet-balance-github">0.00000000</span>
+                        </div>
+                        <div class="text-[10px] text-gray-500 mb-8 font-mono">$VRT (Sovereign Assets)</div>
+
+                        <div id="wallet-auth-section" class="pt-6 border-t border-white/10">
+                            <h3 class="text-white text-[10px] font-bold uppercase tracking-widest mb-4">Sovereign Wallet Portal</h3>
+                            
+                            <div id="wallet-setup-actions" class="grid grid-cols-1 gap-3">
+                                <button onclick="createNewSovereignWallet()" class="w-full py-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-xl hover:bg-emerald-500/30 transition-all text-[9px] font-bold uppercase tracking-widest">
+                                    Create New Wallet (PQC SHA-512)
+                                </button>
+                                <button onclick="showImportUI()" class="w-full py-3 bg-white/5 border border-white/10 text-gray-400 rounded-xl hover:bg-white/10 transition-all text-[9px] font-bold uppercase tracking-widest">
+                                    Import Existing Seed
+                                </button>
+                            </div>
+
+                            <div id="wallet-active-info" class="hidden space-y-4">
+                                <div class="p-3 bg-black/40 rounded-lg border border-white/5">
+                                    <div class="text-[8px] text-gray-500 uppercase tracking-widest mb-1">Active Address</div>
+                                    <div id="display-address" class="text-[9px] font-mono text-emerald-500 break-all leading-tight"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="openSidebar('ETHICAL')" class="py-2 border border-white/10 text-[9px] font-bold uppercase hover:bg-white/5 rounded-lg transition-all">Aset Saya</button>
+                                    <button onclick="syncWalletData()" class="py-2 border border-white/10 text-[9px] font-bold uppercase hover:bg-white/5 rounded-lg transition-all">Sync Node</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 mt-6 pt-6 border-t border-white/10">
+                            <div class="bg-emerald-500/20 border border-emerald-500/40 px-4 py-1.5 rounded-full">
+                                <span class="text-[10px] text-emerald-400 font-black uppercase tracking-widest">119% APR</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-8 uppercase tracking-[0.2em] text-[9px] text-gray-500 ml-auto mr-4">
+                        <div><span class="text-white">Stability:</span> 100% OFFLINE</div>
+                        <div><span class="text-white">Currency:</span> MYR NATIVE</div>
+                    </div>
                 </div>
-            </div>`
-    }
-};
+            </div>
 
-// --- 3. SOVEREIGN CRYPTO ENGINE (PQC SHA-512) ---
-async function deriveAddressFromSeed(seed) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(seed + "SOVEREIGN_2050_SALT");
-    const hashBuffer = await window.crypto.subtle.digest('SHA-512', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const fullHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return "VRT_PQC_" + fullHash.substring(0, 48).toUpperCase();
-}
+            <section id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-48 pb-48">
+                </section>
+        </main>
+    </div>
 
-// --- 4. CORE BRIDGE ENGINE ---
-async function executeSovereignAction(type, payload = {}) {
-    const address = localStorage.getItem('vrt_address');
-    if (!address) {
-        alert("⚠️ AMARAN: Sila aktifkan Wallet Sovereign anda terlebih dahulu.");
-        return;
-    }
-    console.log(`[Bridge] Executing ${type}...`);
-    try {
-        const response = await fetch(`${LOCAL_NODE_IP}/api/execute`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ from: address, type: type, ...payload })
-        });
-        const result = await response.json();
-        if (result.success) {
-            alert(`✅ BERJAYA: ${type}\nTX: ${result.txHash || 'SECURE_LOG'}`);
-            syncWalletData(); 
-        }
-    } catch (error) {
-        console.error("Node Connection Failed", error);
-        alert("❌ NODE OFFLINE: Transaksi disimpan secara lokal dalam fail ES-RFS.");
-    }
-}
+    <div id="protocol-modal" class="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-xl hidden opacity-0 transition-all duration-500">
+        <div id="protocol-modal-content" class="max-w-sm w-full p-10 bg-[#0a0a0a] border border-white/10 rounded-3xl text-center transform scale-95 transition-all duration-500">
+            <h2 id="protocol-title" class="text-xl font-bold text-white mb-4 uppercase tracking-tighter"></h2>
+            <p id="protocol-desc" class="text-gray-400 text-xs mb-8 leading-relaxed"></p>
+            <div class="flex flex-col gap-3">
+                <button id="protocol-confirm" class="w-full py-4 bg-emerald-500 text-black text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-emerald-400">Sahkan Protokol</button>
+                <button id="protocol-cancel" class="w-full py-4 text-gray-500 text-[9px] uppercase font-bold tracking-widest">Batalkan</button>
+            </div>
+        </div>
+    </div>
 
-// --- 5. WALLET UI & SYNC ---
-async function createNewSovereignWallet() {
-    const entropy = window.crypto.getRandomValues(new Uint8Array(32));
-    temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
-    temporaryAddress = await deriveAddressFromSeed(temporarySeed);
-    
-    // Paparkan Seed untuk disalin
-    alert("SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSILA SALIN SEGERA!");
-    document.getElementById('seed-modal')?.classList.remove('hidden');
-}
+    <footer class="fixed bottom-0 w-full p-5 border-t border-white/5 bg-black/90 backdrop-blur-xl z-50 flex flex-col md:flex-row justify-around text-[9px] uppercase tracking-[0.3em] text-gray-500 font-medium">
+        <div class="flex items-center justify-center gap-2 mb-2 md:mb-0">
+            <span class="text-white/30">PROTOCOL:</span> 
+            <span class="text-white tracking-[0.4em] font-bold">ES-RFS SOVEREIGN</span>
+        </div>
+        <div class="text-white flex items-center justify-center gap-3">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
+            STATUS: <span id="node-status-text-footer" class="font-bold uppercase tracking-tighter">STAND-ALONE_ACTIVE (MYR)</span>
+        </div>
+    </footer>
 
-async function verifyAndActivate() {
-    const input = document.getElementById('seed-input-verify').value.trim();
-    if (input === temporarySeed) {
-        localStorage.setItem('vrt_address', temporaryAddress);
-        localStorage.setItem('vrt_seed', temporarySeed);
-        updateWalletUI(temporaryAddress);
-        closeSeedModal();
-    } else {
-        alert("❌ Seed tidak sah.");
-    }
-}
+    <div id="seed-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+        <div class="w-full max-w-md bg-[#0a0a0a] border border-emerald-500/30 p-8 rounded-2xl">
+            <h2 class="text-2xl font-medium text-white mb-6 text-center">Sahkan Seed Phrase</h2>
+            <textarea id="seed-input-verify" class="w-full h-24 bg-black border border-white/10 rounded-xl p-4 text-[10px] font-mono text-emerald-400 mb-4" placeholder="Paste Seed Phrase di sini..."></textarea>
+            <button onclick="verifyAndActivate()" class="w-full py-4 bg-emerald-600 text-white text-[10px] font-bold uppercase rounded-xl">Aktifkan Wallet</button>
+            <button onclick="closeSeedModal()" class="w-full mt-4 text-[9px] text-gray-600 font-bold uppercase">Batal</button>
+        </div>
+    </div>
 
-function updateWalletUI(address) {
-    document.getElementById('wallet-setup-actions')?.classList.add('hidden');
-    document.getElementById('wallet-active-info')?.classList.remove('hidden');
-    const displayAddr = document.getElementById('display-address');
-    if (displayAddr) displayAddr.innerText = address;
-    syncWalletData();
-}
+    <div id="import-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+        <div class="w-full max-w-md bg-[#0a0a0a] border border-blue-500/30 p-8 rounded-2xl">
+            <h2 class="text-2xl font-medium text-white mb-6 text-center">Import Wallet</h2>
+            <textarea id="import-seed-input" class="w-full h-24 bg-black border border-white/10 rounded-xl p-4 text-[10px] font-mono text-blue-400 mb-4" placeholder="Masukkan Seed Phrase..."></textarea>
+            <button onclick="processImport()" class="w-full py-4 bg-blue-600 text-white text-[10px] font-bold uppercase rounded-xl">Pulihkan Akses</button>
+            <button onclick="document.getElementById('import-modal').classList.add('hidden')" class="w-full mt-4 text-[9px] text-gray-600 font-bold uppercase">Batal</button>
+        </div>
+    </div>
 
-async function syncWalletData() {
-    const address = localStorage.getItem('vrt_address');
-    if (!address) return;
-    try {
-        const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`);
-        const data = await res.json();
-        document.getElementById('wallet-balance-github').innerText = data.balance.toFixed(8);
-        document.getElementById('node-status-text-footer').innerText = "NODE ONLINE | ES-RFS ACTIVE";
-    } catch (e) {
-        // Fallback jika node offline
-        document.getElementById('node-status-text-footer').innerText = "STAND-ALONE_ACTIVE (OFFLINE)";
-    }
-}
+    <script src="sovereign-engine.js"></script> 
+    <script src="main.js"></script>
 
-// --- 6. VISUALS: THREE.JS GLOBE ---
-let scene, camera, renderer, globe;
-function initVisuals() {
-    const container = document.getElementById('globe-viewport');
-    if (!container) return;
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    container.appendChild(renderer.domElement);
-
-    const geometry = new THREE.SphereGeometry(2.8, 50, 50);
-    const material = new THREE.PointsMaterial({ color: 0x10b981, size: 0.02, transparent: true, opacity: 0.4 });
-    globe = new THREE.Points(geometry, material);
-    scene.add(globe);
-    camera.position.z = 8;
-
-    function animate() {
-        requestAnimationFrame(animate);
-        if(globe) globe.rotation.y += 0.001;
-        renderer.render(scene, camera);
-    }
-    animate();
-}
-
-// --- 7. BOOT & INITIALIZATION ---
-window.onload = () => {
-    console.log(`System Booting v${SYSTEM_VERSION}`);
-    initVisuals();
-    
-    // Intersection Observer untuk animasi '.reveal'
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Pastikan list produk dijana (Gold/Tanah)
-    if (window.renderProducts) window.renderProducts();
-
-    const savedAddr = localStorage.getItem('vrt_address');
-    if (savedAddr) updateWalletUI(savedAddr);
-};
-
-// --- 8. UTILITIES ---
-function openSidebar(key) {
-    const sidebar = document.getElementById('sovereign-sidebar');
-    const content = document.getElementById('sidebar-dynamic-content');
-    const data = SIDEBAR_DATA[key];
-    if (data && content) {
-        content.innerHTML = `
-            <div class="p-8">
-                <div class="text-emerald-500 text-[10px] font-black tracking-widest uppercase mb-2">${data.badge}</div>
-                <h2 class="text-3xl font-bold mb-6">${data.title}</h2>
-                <div class="text-gray-400">${data.body}</div>
-            </div>`;
-    }
-    sidebar?.classList.add('open');
-}
-
-function closeSidebar() { document.getElementById('sovereign-sidebar')?.classList.remove('open'); }
-function closeSeedModal() { document.getElementById('seed-modal')?.classList.add('hidden'); }
-function showImportUI() { document.getElementById('import-modal')?.classList.remove('hidden'); }
-
-async function processImport() {
-    const input = document.getElementById('import-seed-input').value.trim();
-    if (input.length > 20) {
-        const addr = await deriveAddressFromSeed(input);
-        localStorage.setItem('vrt_address', addr);
-        localStorage.setItem('vrt_seed', input);
-        updateWalletUI(addr);
-        document.getElementById('import-modal').classList.add('hidden');
-    }
-}
+</body>
+</html>
