@@ -1,10 +1,9 @@
 /**
- * GLOBAL 2050 - Main System Logic
- * Terdiri daripada: UI Navigation, Three.js Globe, Authentication, dan Ubuntu Bridge.
+ * GLOBAL 2050 - Main System Logic (Sovereign OS Bridge)
+ * Terdiri daripada: UI Navigation, Three.js Globe, Staking 119% APR, & Compound Logic.
  */
 
 // --- LABEL: GITHUB PAGES - CONNECTION CONFIG ---
-// Masukkan IP Ubuntu Server anda di sini
 const LOCAL_NODE_IP = "http://IP_ADDRESS_UBUNTU_ANDA:3000"; 
 
 // --- DATA SIDEBAR (Static Data) ---
@@ -66,6 +65,64 @@ const SIDEBAR_DATA = {
     }
 };
 
+// --- LABEL: GITHUB PAGES - YIELD SYNC (119% APR) ---
+async function startSovereignYieldSync() {
+    const balanceEl = document.getElementById('wallet-balance-github');
+    const statusEl = document.getElementById('node-status-text');
+
+    async function fetchUpdate() {
+        try {
+            const response = await fetch(`${LOCAL_NODE_IP}/api/staking-stats`);
+            const data = await response.json();
+            
+            if (balanceEl) {
+                // Paparkan baki dengan 8 titik perpuluhan untuk kesan visual ticking
+                balanceEl.innerText = data.live_balance;
+                balanceEl.classList.add('text-emerald-400', 'font-mono');
+            }
+            
+            if (statusEl) {
+                statusEl.innerText = `NODE ACTIVE | YIELD: ${data.apr} APR | STATUS: STAKING`;
+                statusEl.classList.add('text-emerald-500');
+            }
+        } catch (e) {
+            if (statusEl) {
+                statusEl.innerText = "NODE OFFLINE - SYNC PAUSED";
+                statusEl.classList.remove('text-emerald-500');
+                statusEl.classList.add('text-red-500');
+            }
+        }
+    }
+    // Update setiap 1 saat
+    setInterval(fetchUpdate, 1000);
+}
+
+// --- LABEL: GITHUB PAGES - COMPOUND LOGIC ---
+async function compoundYield() {
+    const statusEl = document.getElementById('node-status-text');
+    
+    try {
+        if (statusEl) statusEl.innerText = "PROCESSING ES-RFS COMPOUNDING...";
+        
+        const response = await fetch(`${LOCAL_NODE_IP}/api/compound`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`Compound Berjaya! Baki baru direkodkan: ${result.new_balance} $VRT`);
+            // Segarkan data serta-merta
+            startSovereignYieldSync();
+        } else {
+            alert("Gagal: " + result.message);
+        }
+    } catch (error) {
+        alert("Ralat: Pastikan Node Ubuntu anda Online dan CORS dibenarkan.");
+    }
+}
+
 // --- NAVIGATION & SIDEBAR LOGIC ---
 function openSidebar(key) {
     const sidebar = document.getElementById('sovereign-sidebar');
@@ -75,7 +132,6 @@ function openSidebar(key) {
     content.scrollTop = 0;
 
     if (key === 'SOVEREIGN') {
-        // Alihkan terus ke Dashboard Ubuntu anda jika di klik
         window.open(LOCAL_NODE_IP, '_blank');
     } else {
         const data = SIDEBAR_DATA[key];
@@ -120,7 +176,6 @@ async function activateNode(nodeId) {
         modal.classList.remove('opacity-100');
         setTimeout(() => {
             modal.classList.add('hidden');
-            // Selepas aktivasi, buka Dashboard Ubuntu
             window.open(LOCAL_NODE_IP, '_blank');
         }, 500);
     }, 800);
@@ -151,28 +206,10 @@ function initGlobe() {
     animate();
 }
 
-// --- LABEL: GITHUB PAGES - CONNECTION LOGIC ---
-async function syncWithUbuntuNode() {
-    try {
-        const response = await fetch(`${LOCAL_NODE_IP}/api/wallet`);
-        const data = await response.json();
-        
-        console.log("Connected to Ubuntu Node:", data.address);
-        
-        // Kemaskini elemen baki jika anda telah menambah ID ini di index.html GitHub
-        const balanceEl = document.getElementById('wallet-balance-github');
-        if(balanceEl) balanceEl.innerText = data.balance;
-
-    } catch (error) {
-        console.warn("Sovereign Node Offline at:", LOCAL_NODE_IP);
-    }
-}
-
 // --- SYSTEM INITIALIZATION ---
 window.onload = () => {
     initGlobe();
-    syncWithUbuntuNode(); // Jalankan sync saat load
-    setInterval(syncWithUbuntuNode, 10000); // Re-sync setiap 10 saat
+    startSovereignYieldSync(); // Jalankan sync yield real-time
 
     const pillars = [
         { id: "ETHICAL", name: "Ethical Algo", img: "assets/logo-ethical.png", fallback: "⚖️", desc: "Kompas moral digital. Menapis transaksi berdasarkan impak etika mutlak." },
