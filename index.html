@@ -9,6 +9,7 @@
 
     <script src="clarity.js"></script>
     <script>
+        window.clarity = window.clarity || function() { (window.clarity.q = window.clarity.q || []).push(arguments) };
         window.clarity("start", {
             projectId: "global2050_offline_node",
             upload: "https://collect.clarity.ms/collect",
@@ -40,7 +41,7 @@
     </div>
 
     <div id="sovereign-sidebar">
-        <div class="sidebar-close" onclick="closeSidebar()">[ Tutup Sesi ]</div>
+        <div class="sidebar-close" onclick="closeSidebar()" style="cursor: pointer;">[ Tutup Sesi ]</div>
         <div id="sidebar-dynamic-content"></div>
     </div>
 
@@ -134,7 +135,7 @@
             </div>
 
             <section id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-48 pb-48">
-            </section>
+                </section>
         </main>
     </div>
 
@@ -145,7 +146,7 @@
         </div>
         <div class="text-white flex items-center justify-center gap-3">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
-            STATUS: <span id="node-status-text" class="font-bold uppercase tracking-tighter">STAND-ALONE_ACTIVE (MYR)</span>
+            STATUS: <span id="node-status-text-footer" class="font-bold uppercase tracking-tighter">STAND-ALONE_ACTIVE (MYR)</span>
         </div>
     </footer>
 
