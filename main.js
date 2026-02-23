@@ -1,10 +1,11 @@
 /**
  * GLOBAL 2050 - Main System Logic (Sovereign OS Bridge)
- * Terdiri daripada: UI Navigation, Three.js Globe, Staking 119% APR, & Compound Logic.
+ * Terdiri daripada: UI Navigation, Three.js Globe, Staking 119% APR, & Multi-Asset Sync.
  */
 
 // --- LABEL: GITHUB PAGES - CONNECTION CONFIG ---
-const LOCAL_NODE_IP = "http://http://192.168.8.102:3000"; 
+// Diperbetulkan: Membuang "http://" berganda
+const LOCAL_NODE_IP = "http://192.168.8.102:3000"; 
 
 // --- DATA SIDEBAR (Static Data) ---
 const SIDEBAR_DATA = {
@@ -65,26 +66,35 @@ const SIDEBAR_DATA = {
     }
 };
 
-// --- LABEL: GITHUB PAGES - YIELD SYNC (119% APR) ---
+// --- LABEL: GITHUB PAGES - YIELD & ASSET SYNC ---
 async function startSovereignYieldSync() {
     const balanceEl = document.getElementById('wallet-balance-github');
     const statusEl = document.getElementById('node-status-text');
 
     async function fetchUpdate() {
         try {
-            const response = await fetch(`${LOCAL_NODE_IP}/api/staking-stats`);
-            const data = await response.json();
+            // 1. Sync Staking Stats (Untuk Visual Ticking)
+            const statsRes = await fetch(`${LOCAL_NODE_IP}/api/staking-stats`);
+            const statsData = await statsRes.json();
             
             if (balanceEl) {
-                // Paparkan baki dengan 8 titik perpuluhan untuk kesan visual ticking
-                balanceEl.innerText = data.live_balance;
+                balanceEl.innerText = statsData.live_balance;
                 balanceEl.classList.add('text-emerald-400', 'font-mono');
             }
             
             if (statusEl) {
-                statusEl.innerText = `NODE ACTIVE | YIELD: ${data.apr} APR | STATUS: STAKING`;
+                statusEl.innerText = `NODE ACTIVE | YIELD: ${statsData.apr} APR | STATUS: STAKING`;
                 statusEl.classList.add('text-emerald-500');
             }
+
+            // 2. Sync Wallet Assets (Emas & Tanah)
+            const walletRes = await fetch(`${LOCAL_NODE_IP}/api/wallet`);
+            const walletData = await walletRes.json();
+            
+            // Simpan ke window global supaya sovereign-engine.js boleh akses
+            window.currentSovereignAssets = walletData.assets;
+            console.log("RWA Assets Synced:", walletData.assets);
+
         } catch (e) {
             if (statusEl) {
                 statusEl.innerText = "NODE OFFLINE - SYNC PAUSED";
@@ -113,8 +123,6 @@ async function compoundYield() {
         
         if (result.success) {
             alert(`Compound Berjaya! Baki baru direkodkan: ${result.new_balance} $VRT`);
-            // Segarkan data serta-merta
-            startSovereignYieldSync();
         } else {
             alert("Gagal: " + result.message);
         }
@@ -132,7 +140,12 @@ function openSidebar(key) {
     content.scrollTop = 0;
 
     if (key === 'SOVEREIGN') {
-        window.open(LOCAL_NODE_IP, '_blank');
+        // Jika fungsi renderLedgerView wujud dalam sovereign-engine.js, jalankan ia
+        if (typeof renderLedgerView === 'function') {
+            renderLedgerView();
+        } else {
+            window.open(LOCAL_NODE_IP, '_blank');
+        }
     } else {
         const data = SIDEBAR_DATA[key];
         if (data) {
@@ -154,7 +167,7 @@ function closeSidebar() {
 }
 
 // --- AUTH LOGIC (NODE ACTIVATION) ---
-async function activateNode(nodeId) {
+async function activateNode() {
     const modal = document.getElementById('auth-modal');
     if (!modal) return;
 
@@ -176,7 +189,8 @@ async function activateNode(nodeId) {
         modal.classList.remove('opacity-100');
         setTimeout(() => {
             modal.classList.add('hidden');
-            window.open(LOCAL_NODE_IP, '_blank');
+            // Paparkan Dashboard Utama selepas aktivasi
+            startSovereignYieldSync();
         }, 500);
     }, 800);
 }
@@ -209,13 +223,13 @@ function initGlobe() {
 // --- SYSTEM INITIALIZATION ---
 window.onload = () => {
     initGlobe();
-    startSovereignYieldSync(); // Jalankan sync yield real-time
+    startSovereignYieldSync();
 
     const pillars = [
         { id: "ETHICAL", name: "Ethical Algo", img: "assets/logo-ethical.png", fallback: "⚖️", desc: "Kompas moral digital. Menapis transaksi berdasarkan impak etika mutlak." },
         { id: "STANDALONE", name: "Stand-alone OS", img: "assets/logo-os.png", fallback: "📱", desc: "Operasi 100% offline. Kedaulatan penuh tanpa Cloud atau pihak ketiga." },
         { id: "REGEN", name: "Regenerative", img: "assets/logo-regen.png", fallback: "🌿", desc: "Sistem pemulihan alam. Menukar impak hijau kepada nilai ekonomi MYR." },
-        { id: "SOVEREIGN", name: "Sovereign RWA", img: "assets/logo-rwa.png", fallback: "🔐", desc: "Pengurusan aset dunia nyata (MYR) yang disahkan melalui protokol ES-RFS." }
+        { id: "SOVEREIGN", name: "Sovereign RWA", img: "assets/logo-rwa.png", fallback: "🔐", desc: "Pengurusan aset dunia nyata (Gold/Land) yang disahkan melalui protokol ES-RFS." }
     ];
 
     const productList = document.getElementById('product-list');
