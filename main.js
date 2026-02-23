@@ -171,11 +171,15 @@ async function createNewSovereignWallet() {
     temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
     temporaryAddress = await deriveAddressFromSeed(temporarySeed);
     
+    // PERBAIKAN: Memaparkan Seed Phrase dalam Alert supaya pengguna boleh salin
+    const msg = "SILA SALIN SEGERA SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSimpan di tempat selamat. Anda perlukan kod ini untuk pengesahan sebentar lagi.";
+    console.log("[SYSTEM] New Seed Generated:", temporarySeed);
+    alert(msg);
+    
     const seedDisplay = document.getElementById('seed-display-area');
     if (seedDisplay) seedDisplay.innerText = temporarySeed;
     
     document.getElementById('seed-modal')?.classList.remove('hidden');
-    alert("⚠️ AMARAN KESELAMATAN: Sila salin Seed Phrase anda. Ia tidak akan dipaparkan lagi.");
 }
 
 async function verifyAndActivate() {
@@ -194,8 +198,9 @@ async function verifyAndActivate() {
 
         updateWalletUI(temporaryAddress);
         closeSeedModal();
+        alert("✅ WALLET BERJAYA DIAKTIFKAN!");
     } else {
-        alert("❌ Seed tidak sah. Sila cuba lagi.");
+        alert("❌ Seed tidak sah. Sila pastikan anda menampal kod yang betul.");
     }
 }
 
@@ -227,14 +232,14 @@ async function syncWalletData() {
 }
 
 function updateNodeStatus(online) {
-    const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
+    const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status, #node-status-text-footer');
     statusEls.forEach(el => {
         if (online) {
             el.innerText = "NODE ONLINE | ES-RFS SECURE";
             el.className = "text-emerald-500 font-bold uppercase tracking-tighter";
         } else {
-            el.innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
-            el.className = "text-red-500 font-bold uppercase tracking-tighter";
+            el.innerText = "STAND-ALONE_ACTIVE (OFFLINE)";
+            el.className = "text-white/50 font-bold uppercase tracking-tighter";
         }
     });
 }
