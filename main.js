@@ -1,6 +1,6 @@
 /**
  * GLOBAL 2050 - SOVEREIGN OS SYSTEM LOGIC
- * Version: Solid-2050.Build.01
+ * Version: Solid-2050.Build.01 (Ultimate Edition)
  * Components: PQC Security, Three.js Starfield, Ubuntu Bridge, & RWA Ledger.
  */
 
@@ -122,14 +122,14 @@ async function executeSovereignAction(type, payload = {}) {
 
         const result = await response.json();
         if (result.success) {
-            alert(`✅ PROTKOAL BERJAYA: ${type}\n\nTransaction Hash: ${result.txHash || 'SECURE_OFFLINE_LOG'}`);
+            alert(`✅ PROTOKOL BERJAYA: ${type}\n\nTransaction Hash: ${result.txHash || 'SECURE_OFFLINE_LOG'}`);
             syncWalletData(); 
         } else {
-            alert(`❌ RALAT NODE: ${result.message}`);
+            alert(`❌ RALAT NODE: ${result.message || result.error}`);
         }
     } catch (error) {
         console.error("Bridge Connection Failed", error);
-        alert("❌ KEGAGALAN SAMBUNGAN: Node Ubuntu tidak dapat dicapai. Pastikan Server.js aktif.");
+        alert("❌ KEGAGALAN SAMBUNGAN: Node Ubuntu tidak dapat dicapai. Sila benarkan 'Insecure Content' di Site Settings browser anda.");
     }
 }
 
@@ -216,18 +216,24 @@ async function syncWalletData() {
         const balEl = document.getElementById('wallet-balance-github');
         if (balEl) balEl.innerText = data.balance.toFixed(8);
         
-        document.getElementById('node-status-text').innerText = "NODE ONLINE | ES-RFS SECURE";
-        document.getElementById('node-status-text').className = "text-emerald-500 text-[10px] font-bold";
+        const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
+        statusEls.forEach(el => {
+            el.innerText = "NODE ONLINE | ES-RFS SECURE";
+            el.className = "text-emerald-500 font-bold uppercase tracking-tighter";
+        });
         isNodeOnline = true;
     } catch (e) {
-        document.getElementById('node-status-text').innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
-        document.getElementById('node-status-text').className = "text-red-500 text-[10px] font-bold";
+        const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status');
+        statusEls.forEach(el => {
+            el.innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
+            el.className = "text-red-500 font-bold uppercase tracking-tighter";
+        });
         isNodeOnline = false;
     }
 }
 
 // --- 7. VISUALS: THREE.JS GLOBE & STARFIELD ---
-let scene, camera, renderer, globe;
+let scene, camera, renderer, globe, stars;
 
 function initVisuals() {
     const container = document.getElementById('globe-viewport');
@@ -248,7 +254,7 @@ function initVisuals() {
         starVertices.push((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100);
     }
     starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-    const stars = new THREE.Points(starGeometry, starMaterial);
+    stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
     // Add Globe
@@ -265,10 +271,16 @@ function initVisuals() {
 
     camera.position.z = 8;
 
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
     function animate() {
         requestAnimationFrame(animate);
-        globe.rotation.y += 0.001;
-        stars.rotation.y -= 0.0002;
+        if(globe) globe.rotation.y += 0.001;
+        if(stars) stars.rotation.y -= 0.0002;
         renderer.render(scene, camera);
     }
     animate();
@@ -305,3 +317,20 @@ function openSidebar(key) {
 
 function closeSidebar() { document.getElementById('sovereign-sidebar')?.classList.remove('open'); }
 function closeSeedModal() { document.getElementById('seed-modal')?.classList.add('hidden'); }
+
+// --- 9. EXTRA BRIDGE HELPERS ---
+function showImportUI() {
+    document.getElementById('import-modal')?.classList.remove('hidden');
+}
+
+async function processImport() {
+    const input = document.getElementById('import-seed-input').value.trim();
+    if (input.length > 10) {
+        const addr = await deriveAddressFromSeed(input);
+        localStorage.setItem('vrt_address', addr);
+        localStorage.setItem('vrt_seed', input);
+        updateWalletUI(addr);
+        document.getElementById('import-modal')?.classList.add('hidden');
+        alert("✅ Wallet Dipulihkan & Diselaraskan.");
+    }
+}
