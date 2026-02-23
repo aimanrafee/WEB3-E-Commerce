@@ -11,7 +11,7 @@
     <script>
         window.clarity("start", {
             projectId: "global2050_offline_node",
-            upload: "https://x.clarity.ms/collect",
+            upload: "https://collect.clarity.ms/collect",
             expire: 365
         });
         window.clarity("set", "system_mode", "ES-RFS_SOVEREIGN_ALGO");
@@ -39,27 +39,9 @@
         </div>
     </div>
 
-    <div id="protocol-modal" class="fixed inset-0 z-[110] flex items-center justify-center hidden opacity-0 transition-opacity duration-500 bg-black/80 backdrop-blur-md">
-        <div class="bg-[#0a0a0a] border border-emerald-500/30 p-8 rounded-2xl max-w-sm w-full mx-4 shadow-[0_0_50px_rgba(16,185,129,0.1)] transform scale-95 transition-transform duration-500" id="protocol-modal-content">
-            <div class="text-[10px] text-emerald-500 tracking-[0.4em] font-bold mb-2 uppercase">Protokol Pengesahan</div>
-            <h3 class="text-xl text-white font-medium mb-4 tracking-tight" id="protocol-title">Sahkan Transaksi</h3>
-            <p class="text-xs text-gray-400 leading-relaxed mb-8 font-light" id="protocol-desc">Sahkan protokol perolehan aset untuk dikunci ke dalam Sovereign Node anda.</p>
-            
-            <div class="flex gap-4">
-                <button id="protocol-cancel" class="flex-1 py-3 border border-white/10 text-white text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all">
-                    Batal
-                </button>
-                <button id="protocol-confirm" class="flex-1 py-3 bg-emerald-500 text-black text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all">
-                    Sahkan
-                </button>
-            </div>
-        </div>
-    </div>
-
     <div id="sovereign-sidebar">
         <div class="sidebar-close" onclick="closeSidebar()">[ Tutup Sesi ]</div>
-        <div id="sidebar-dynamic-content">
-            </div>
+        <div id="sidebar-dynamic-content"></div>
     </div>
 
     <div class="content-overlay">
@@ -67,10 +49,14 @@
             <div class="text-xl font-bold tracking-tighter uppercase">GLOBAL <span class="font-light text-dim tracking-normal opacity-50">2050</span></div>
             
             <div class="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-widest">
-                <a onclick="openSidebar('ETHICAL')" class="nav-link cursor-pointer">ES-RFS Protocol</a>
-                <a onclick="openSidebar('STANDALONE')" class="nav-link cursor-pointer">Sovereign Nodes</a>
-                <a onclick="openSidebar('SOVEREIGN')" class="nav-link text-emerald-500 cursor-pointer">View RWA Ledger</a>
-                <a onclick="openSidebar('REGEN')" class="nav-link cursor-pointer">Natural Capital</a>
+                <a onclick="openSidebar('ETHICAL')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">ES-RFS Protocol</a>
+                <a onclick="openSidebar('STANDALONE')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Sovereign Nodes</a>
+                
+                <a href="http://192.168.8.102:3000" target="_blank" class="nav-link text-emerald-500 cursor-pointer font-black border-b border-emerald-500/30">
+                    View RWA Ledger
+                </a>
+                
+                <a onclick="openSidebar('REGEN')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Natural Capital</a>
             </div>
 
             <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">CONNECT</a>
@@ -85,14 +71,19 @@
                 </p>
 
                 <div class="flex flex-col md:flex-row gap-6 mb-24 reveal delay-3">
-                    <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">Aktifkan Sovereign Node</button>
-                    <button onclick="openSidebar('SOVEREIGN')" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all text-white">Sistem Ledger</button>
+                    <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">
+                        Aktifkan Sovereign Node
+                    </button>
+                    
+                    <a href="http://192.168.x.x:3000" target="_blank" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all text-white text-center">
+                        Sistem Ledger
+                    </a>
                 </div>
 
                 <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
-                    <div><span class="stats-highlight text-white">PROTOCOL</span> ES-RFS v1.0</div>
-                    <div><span class="stats-highlight text-white">STABILITY</span> 100% OFFLINE</div>
-                    <div><span class="stats-highlight text-white">CURRENCY</span> MYR NATIVE</div>
+                    <div><span class="stats-highlight text-white uppercase">Balance:</span> <span id="wallet-balance-github" class="text-emerald-500 tracking-tighter">0.00</span> $VRT</div>
+                    <div><span class="stats-highlight text-white uppercase">Stability:</span> 100% OFFLINE</div>
+                    <div><span class="stats-highlight text-white uppercase">Currency:</span> MYR NATIVE</div>
                 </div>
             </div>
 
@@ -108,7 +99,7 @@
         </div>
         <div class="text-white flex items-center justify-center gap-3">
             <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> 
-            STATUS: <span class="font-bold">STAND-ALONE_ACTIVE (MYR)</span>
+            STATUS: <span id="node-status-text" class="font-bold uppercase tracking-tighter">STAND-ALONE_ACTIVE (MYR)</span>
         </div>
     </footer>
 
