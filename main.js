@@ -132,7 +132,7 @@ async function executeSovereignAction(type, payload = {}) {
         }
     } catch (error) {
         console.error("Bridge Connection Failed", error);
-        alert("❌ KEGAGALAN SAMBUNGAN: Node Ubuntu tidak dapat dicapai. Sila benarkan 'Insecure Content' di Site Settings browser anda.");
+        alert("❌ NODE OFFLINE: Transaksi disimpan secara lokal dalam fail ES-RFS.");
     }
 }
 
@@ -171,10 +171,8 @@ async function createNewSovereignWallet() {
     temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
     temporaryAddress = await deriveAddressFromSeed(temporarySeed);
     
-    // PERBAIKAN: Memaparkan Seed Phrase dalam Alert supaya pengguna boleh salin
-    const msg = "SILA SALIN SEGERA SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSimpan di tempat selamat. Anda perlukan kod ini untuk pengesahan sebentar lagi.";
-    console.log("[SYSTEM] New Seed Generated:", temporarySeed);
-    alert(msg);
+    // PAPARAN UTAMA SEED
+    alert("SILA SALIN SEGERA SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSimpan di tempat selamat.");
     
     const seedDisplay = document.getElementById('seed-display-area');
     if (seedDisplay) seedDisplay.innerText = temporarySeed;
@@ -198,9 +196,9 @@ async function verifyAndActivate() {
 
         updateWalletUI(temporaryAddress);
         closeSeedModal();
-        alert("✅ WALLET BERJAYA DIAKTIFKAN!");
+        alert("✅ WALLET AKTIF: Selamat datang ke Global 2050.");
     } else {
-        alert("❌ Seed tidak sah. Sila pastikan anda menampal kod yang betul.");
+        alert("❌ Seed tidak sah. Sila pastikan anda memasukkan kod 64-aksara yang betul.");
     }
 }
 
@@ -235,11 +233,11 @@ function updateNodeStatus(online) {
     const statusEls = document.querySelectorAll('#node-status-text, #footer-node-status, #node-status-text-footer');
     statusEls.forEach(el => {
         if (online) {
-            el.innerText = "NODE ONLINE | ES-RFS SECURE";
+            el.innerText = "NODE ONLINE | ES-RFS ACTIVE";
             el.className = "text-emerald-500 font-bold uppercase tracking-tighter";
         } else {
             el.innerText = "STAND-ALONE_ACTIVE (OFFLINE)";
-            el.className = "text-white/50 font-bold uppercase tracking-tighter";
+            el.className = "text-white/40 font-bold uppercase tracking-tighter";
         }
     });
 }
@@ -258,7 +256,7 @@ function initVisuals() {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    // Add Stars
+    // Stars
     const starQty = 2000;
     const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
@@ -270,7 +268,7 @@ function initVisuals() {
     stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
-    // Add Globe
+    // Globe
     const geometry = new THREE.SphereGeometry(2.8, 80, 80);
     const material = new THREE.PointsMaterial({ 
         color: 0x10b981, 
@@ -304,7 +302,6 @@ window.onload = () => {
     console.log(`%c[SYSTEM] Booting Global 2050... v${SYSTEM_VERSION}`, "color: #10b981; font-weight: bold;");
     initVisuals();
     
-    // Intersection Observer for Reveal Animation
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) entry.target.classList.add('active');
@@ -313,7 +310,7 @@ window.onload = () => {
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Auto-sync every 5 seconds
+    // Auto-sync
     setInterval(syncWalletData, 5000);
 
     const savedAddr = localStorage.getItem('vrt_address');
