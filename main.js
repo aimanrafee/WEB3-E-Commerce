@@ -1,76 +1,178 @@
 /**
- * GLOBAL 2050 - Sovereign OS Full Stack (v.Solid-2050)
- * Integrated: PQC Wallet, ES-RFS Protocols, Three.js Globe, & Ubuntu Sync.
+ * GLOBAL 2050 - SOVEREIGN OS SYSTEM LOGIC
+ * Version: Solid-2050.Build.01
+ * Components: PQC Security, Three.js Starfield, Ubuntu Bridge, & RWA Ledger.
  */
 
-// --- 1. CONFIGURATION ---
-const LOCAL_NODE_IP = "http://192.168.8.102:3000"; 
+// --- 1. GLOBAL CONFIGURATIONS ---
+const LOCAL_NODE_IP = "http://192.168.8.102:3000";
+const SYSTEM_VERSION = "2050.SOLID";
 let temporarySeed = ""; 
 let temporaryAddress = "";
+let isNodeOnline = false;
 
-// --- 2. DATA: SOVEREIGN PROTOCOLS (ES-RFS) ---
+// --- 2. EXTENDED SIDEBAR DATA (ES-RFS PROTOCOLS) ---
 const SIDEBAR_DATA = {
     'ETHICAL': {
-        title: 'ES-RFS Protocol',
-        badge: 'Algorithm Standard',
+        title: 'ES-RFS: Ethical Algorithm',
+        badge: 'Moral Core',
         body: `
-            <p class="text-gray-400 text-sm mb-6">Manual kedaulatan digital 2050 yang menapis transaksi berdasarkan impak etika mutlak.</p>
-            <div class="space-y-4">
-                <div class="p-4 bg-white/5 border-l-2 border-emerald-500 rounded-r">
-                    <div class="text-[10px] font-bold text-emerald-500 mb-1 uppercase">Moral Compass</div>
-                    <div class="text-xs text-gray-300">Algoritma menapis transaksi mengikut impak sosial global.</div>
+            <div class="space-y-6">
+                <p class="text-gray-400 text-sm leading-relaxed">Protokol Etika 2050 menetapkan piawaian di mana setiap transaksi ditapis melalui 'Moral Compass' digital.</p>
+                <div class="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
+                    <h4 class="text-xs font-bold text-emerald-500 mb-2 uppercase">Proof of Impact (PoI)</h4>
+                    <p class="text-[11px] text-gray-400">Hanya transaksi yang memberikan impak positif kepada ekosistem sosial dibenarkan melepasi lapisan konsensus.</p>
                 </div>
-                <div class="p-4 bg-white/5 border-l-2 border-blue-500 rounded-r">
-                    <div class="text-[10px] font-bold text-blue-500 mb-1 uppercase">Privacy Layer</div>
-                    <div class="text-xs text-gray-300">Enkripsi SHA-512 memastikan identiti anda tidak boleh dijejak oleh pihak ketiga.</div>
+                <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+                    <h4 class="text-xs font-bold text-white mb-2 uppercase">Human-Centric Design</h4>
+                    <p class="text-[11px] text-gray-400">Algoritma ini tidak boleh dimanipulasi oleh entiti korporat atau AI berpusat.</p>
                 </div>
             </div>`
     },
     'STANDALONE': {
-        title: 'Sovereign Nodes',
-        badge: 'Offline Infrastructure',
+        title: 'Sovereign Stand-alone OS',
+        badge: 'Infrastructure',
         body: `
-            <div class="mb-6">
-                <div class="text-[10px] text-gray-500 uppercase mb-4 tracking-widest font-bold">Active Local Mesh</div>
-                <div class="flex justify-between items-center py-3 border-b border-white/5 font-mono">
-                    <span class="text-xs">Node_KL_Primary</span>
-                    <span class="text-[10px] text-emerald-500 animate-pulse">ONLINE</span>
+            <div class="space-y-6">
+                <div class="flex justify-between items-center p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                    <div>
+                        <div class="text-[10px] text-blue-400 font-black uppercase">Mesh Status</div>
+                        <div class="text-xl font-mono text-white">OFFLINE-FIRST</div>
+                    </div>
+                    <div class="h-3 w-3 bg-blue-500 animate-ping rounded-full"></div>
                 </div>
-            </div>
-            <div class="p-6 bg-blue-500/10 border border-blue-500/20 text-center rounded-lg">
-                <div class="text-2xl font-bold text-white tracking-tighter">100% OFFLINE CAPABLE</div>
+                <p class="text-gray-400 text-xs">Sistem operasi ini berfungsi 100% tanpa internet (Local Mesh). Data anda disimpan dalam storan biometrik peranti anda sendiri.</p>
+                <ul class="text-[11px] text-gray-500 space-y-2">
+                    <li>• No Cloud Synchronization</li>
+                    <li>• Zero-Knowledge Proof Encryption</li>
+                    <li>• Hardware-level Sovereignty</li>
+                </ul>
             </div>`
     },
     'REGEN': {
-        title: 'Natural Capital',
-        badge: 'Regenerative Metrics',
+        title: 'Regenerative Economics',
+        badge: 'Natural Capital',
         body: `
-            <div class="p-6 bg-emerald-500/10 border border-emerald-500/20 mb-6 text-center rounded-xl">
-                <div class="text-4xl font-light mb-2 text-white font-mono tracking-tighter">14,204</div>
-                <div class="text-[9px] text-emerald-500 tracking-[0.3em] font-bold uppercase">Carbon Credits Restored</div>
-            </div>
-            <p class="text-xs text-gray-500 italic text-center">Data disinkronkan secara real-time dengan unit MYR melalui pasaran hijau.</p>`
+            <div class="space-y-6">
+                <div class="p-6 bg-gradient-to-br from-emerald-600/20 to-transparent border border-emerald-500/20 rounded-2xl text-center">
+                    <div class="text-4xl font-light text-white mb-2 tracking-tighter">14,204</div>
+                    <div class="text-[9px] text-emerald-500 font-black uppercase tracking-widest">Carbon Credits Restored</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-white/5 rounded-lg border border-white/10">
+                        <div class="text-[10px] text-gray-500 uppercase">Biodiversity</div>
+                        <div class="text-lg text-white font-mono">82.4%</div>
+                    </div>
+                    <div class="p-3 bg-white/5 rounded-lg border border-white/10">
+                        <div class="text-[10px] text-gray-500 uppercase">Water Purity</div>
+                        <div class="text-lg text-white font-mono">94.1%</div>
+                    </div>
+                </div>
+            </div>`
+    },
+    'SOVEREIGN': {
+        title: 'Sovereign RWA Ledger',
+        badge: 'Real World Assets',
+        body: `
+            <div class="space-y-4">
+                <p class="text-gray-400 text-sm">Pengurusan aset fizikal (Emas, Tanah, Tenaga) yang di-tokenkan secara berdaulat.</p>
+                <div class="p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
+                    <div class="flex justify-between text-xs mb-2">
+                        <span class="text-gray-400">Gold Reserve</span>
+                        <span class="text-yellow-500 font-mono">1.240 kg</span>
+                    </div>
+                    <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                        <div class="bg-yellow-500 h-full w-[65%]"></div>
+                    </div>
+                </div>
+            </div>`
     }
 };
 
-// --- 3. CRYPTO ENGINE (PQC SHA-512) ---
+// --- 3. SOVEREIGN CRYPTO ENGINE (PQC SHA-512) ---
 async function deriveAddressFromSeed(seed) {
-    const msgUint8 = new TextEncoder().encode(seed + "PUBLIC");
-    const hashBuffer = await window.crypto.subtle.digest('SHA-512', msgUint8);
+    const encoder = new TextEncoder();
+    const data = encoder.encode(seed + "SOVEREIGN_2050_SALT");
+    const hashBuffer = await window.crypto.subtle.digest('SHA-512', data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const publicKey = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return "VRT_PQC_" + publicKey.substring(0, 48).toUpperCase();
+    const fullHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return "VRT_PQC_" + fullHash.substring(0, 48).toUpperCase();
 }
 
-// --- 4. WALLET MANAGEMENT ---
-async function createNewSovereignWallet() {
+// --- 4. CORE BRIDGE ENGINE (FETCH & EXECUTE) ---
+async function executeSovereignAction(type, payload = {}) {
+    const address = localStorage.getItem('vrt_address');
+    if (!address) {
+        alert("⚠️ AMARAN: Sila aktifkan Wallet Sovereign anda terlebih dahulu.");
+        return;
+    }
+
+    console.log(`[Bridge] Executing ${type}...`);
     try {
-        const entropy = window.crypto.getRandomValues(new Uint8Array(32));
-        temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
-        temporaryAddress = await deriveAddressFromSeed(temporarySeed);
-        alert("⚠️ PROTOKOL KESELAMATAN: Salin Seed Phrase ini!\n\n" + temporarySeed);
-        document.getElementById('seed-modal')?.classList.remove('hidden');
-    } catch (err) { alert("Sistem tidak menyokong PQC."); }
+        const response = await fetch(`${LOCAL_NODE_IP}/api/execute`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                from: address,
+                type: type,
+                ...payload,
+                client_ts: new Date().toISOString()
+            })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert(`✅ PROTKOAL BERJAYA: ${type}\n\nTransaction Hash: ${result.txHash || 'SECURE_OFFLINE_LOG'}`);
+            syncWalletData(); 
+        } else {
+            alert(`❌ RALAT NODE: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("Bridge Connection Failed", error);
+        alert("❌ KEGAGALAN SAMBUNGAN: Node Ubuntu tidak dapat dicapai. Pastikan Server.js aktif.");
+    }
+}
+
+// --- 5. INDIVIDUAL BUTTON ACTIONS (MANUAL) ---
+function sendTransaction() {
+    const to = prompt("Masukkan Alamat VRT Penerima:");
+    const amount = prompt("Jumlah untuk dihantar:");
+    if (to && amount) {
+        executeSovereignAction('SEND', { to, amount: parseFloat(amount) });
+    }
+}
+
+function stakeVRT() {
+    const amount = prompt("Masukkan Jumlah VRT untuk Staking (119% APR):");
+    if (amount) {
+        executeSovereignAction('STAKE', { amount: parseFloat(amount) });
+    }
+}
+
+function compoundYield() {
+    if (confirm("Laksanakan Auto-Compound untuk baki terkumpul?")) {
+        executeSovereignAction('COMPOUND', { strategy: 'aggressive-2050' });
+    }
+}
+
+function unstakeRequest() {
+    const amount = prompt("Masukkan Jumlah untuk Unstake:");
+    if (amount) {
+        executeSovereignAction('UNSTAKE', { amount: parseFloat(amount) });
+    }
+}
+
+// --- 6. WALLET UI & SYNC ---
+async function createNewSovereignWallet() {
+    const entropy = window.crypto.getRandomValues(new Uint8Array(32));
+    temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
+    temporaryAddress = await deriveAddressFromSeed(temporarySeed);
+    
+    const seedDisplay = document.getElementById('seed-display-area');
+    if (seedDisplay) seedDisplay.innerText = temporarySeed;
+    
+    document.getElementById('seed-modal')?.classList.remove('hidden');
+    alert("⚠️ AMARAN KESELAMATAN: Sila salin Seed Phrase anda. Ia tidak akan dipaparkan lagi.");
 }
 
 async function verifyAndActivate() {
@@ -78,161 +180,128 @@ async function verifyAndActivate() {
     if (input === temporarySeed) {
         localStorage.setItem('vrt_address', temporaryAddress);
         localStorage.setItem('vrt_seed', temporarySeed);
-        await registerWalletAtUbuntu(temporaryAddress);
+        
+        // Daftar ke Ubuntu Node
+        try {
+            await fetch(`${LOCAL_NODE_IP}/api/register-wallet`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: temporaryAddress })
+            });
+        } catch (e) { console.warn("Node registration skipped (offline mode)"); }
+
         updateWalletUI(temporaryAddress);
         closeSeedModal();
-        alert("✅ WALLET AKTIF!");
-    } else { alert("❌ Seed tidak sepadan."); }
-}
-
-async function processImport() {
-    const input = document.getElementById('import-seed-input').value.trim();
-    if (input.length < 32) return alert("Seed tidak sah.");
-    const addr = await deriveAddressFromSeed(input);
-    localStorage.setItem('vrt_address', addr);
-    localStorage.setItem('vrt_seed', input);
-    await registerWalletAtUbuntu(addr);
-    updateWalletUI(addr);
-    document.getElementById('import-modal')?.classList.add('hidden');
-}
-
-// --- 5. BRIDGE ACTIONS (STAKE, COMPOUND, SEND, UNSTAKE) ---
-async function executeSovereignAction(type, details) {
-    const sender = localStorage.getItem('vrt_address');
-    if (!sender) return alert("Sila aktifkan wallet.");
-
-    try {
-        const response = await fetch(`${LOCAL_NODE_IP}/api/execute`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ from: sender, type, ...details, timestamp: new Date().toISOString() })
-        });
-        const res = await response.json();
-        if (res.success) alert(`✅ Protokol ${type} Berjaya!`);
-        else alert("Ralat: " + res.message);
-    } catch (e) { alert("Ralat Sambungan Ubuntu Node."); }
-}
-
-// Fungsi Manual Satu-Per-Satu
-function sendTransaction() {
-    const to = prompt("Alamat Penerima:");
-    const amount = prompt("Jumlah VRT:");
-    if (to && amount) executeSovereignAction('SEND', { to, amount: parseFloat(amount) });
-}
-
-function stakeVRT() {
-    const amount = prompt("Jumlah untuk Stake (APR 119%):");
-    if (amount) executeSovereignAction('STAKE', { amount: parseFloat(amount) });
-}
-
-function compoundYield() {
-    executeSovereignAction('COMPOUND', { note: "Manual Compound" });
-}
-
-function unstakeRequest() {
-    const amount = prompt("Jumlah untuk Unstake:");
-    if (amount) executeSovereignAction('UNSTAKE', { amount: parseFloat(amount) });
-}
-
-// --- 6. SYNC & UI ENGINE ---
-async function registerWalletAtUbuntu(address) {
-    try {
-        await fetch(`${LOCAL_NODE_IP}/api/register-wallet`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ address })
-        });
-    } catch (e) { console.log("Registrasi gagal (Node Offline)"); }
-}
-
-function startSovereignYieldSync() {
-    const balanceEl = document.getElementById('wallet-balance-github');
-    const statusEl = document.getElementById('node-status-text');
-    const addr = localStorage.getItem('vrt_address');
-
-    setInterval(async () => {
-        if (!addr) return;
-        try {
-            const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${addr}`);
-            const data = await res.json();
-            if (balanceEl) balanceEl.innerText = data.balance.toFixed(8);
-            if (statusEl) statusEl.innerText = `NODE ACTIVE | ADDRESS: ${addr.substring(0,12)}...`;
-        } catch (e) {
-            if (statusEl) statusEl.innerText = "NODE OFFLINE - SYNC PAUSED";
-        }
-    }, 2000);
+    } else {
+        alert("❌ Seed tidak sah. Sila cuba lagi.");
+    }
 }
 
 function updateWalletUI(address) {
     document.getElementById('wallet-setup-actions')?.classList.add('hidden');
     document.getElementById('wallet-active-info')?.classList.remove('hidden');
-    const display = document.getElementById('display-address');
-    if (display) display.innerText = address;
-    startSovereignYieldSync();
+    const displayAddr = document.getElementById('display-address');
+    if (displayAddr) displayAddr.innerText = address;
+    syncWalletData();
 }
 
-// --- 7. VISUALS: THREE.JS GLOBE ---
-function initGlobe() {
+async function syncWalletData() {
+    const address = localStorage.getItem('vrt_address');
+    if (!address) return;
+
+    try {
+        const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`);
+        const data = await res.json();
+        
+        const balEl = document.getElementById('wallet-balance-github');
+        if (balEl) balEl.innerText = data.balance.toFixed(8);
+        
+        document.getElementById('node-status-text').innerText = "NODE ONLINE | ES-RFS SECURE";
+        document.getElementById('node-status-text').className = "text-emerald-500 text-[10px] font-bold";
+        isNodeOnline = true;
+    } catch (e) {
+        document.getElementById('node-status-text').innerText = "NODE OFFLINE | LOCAL SYNC ONLY";
+        document.getElementById('node-status-text').className = "text-red-500 text-[10px] font-bold";
+        isNodeOnline = false;
+    }
+}
+
+// --- 7. VISUALS: THREE.JS GLOBE & STARFIELD ---
+let scene, camera, renderer, globe;
+
+function initVisuals() {
     const container = document.getElementById('globe-viewport');
     if (!container) return;
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
 
-    const globe = new THREE.Points(
-        new THREE.SphereGeometry(2.8, 80, 80),
-        new THREE.PointsMaterial({ color: 0x10b981, size: 0.012, transparent: true, opacity: 0.4 })
-    );
+    // Add Stars
+    const starQty = 2000;
+    const starGeometry = new THREE.BufferGeometry();
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
+    const starVertices = [];
+    for (let i = 0; i < starQty; i++) {
+        starVertices.push((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100);
+    }
+    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+    const stars = new THREE.Points(starGeometry, starMaterial);
+    scene.add(stars);
+
+    // Add Globe
+    const geometry = new THREE.SphereGeometry(2.8, 80, 80);
+    const material = new THREE.PointsMaterial({ 
+        color: 0x10b981, 
+        size: 0.015, 
+        transparent: true, 
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending 
+    });
+    globe = new THREE.Points(geometry, material);
     scene.add(globe);
+
     camera.position.z = 8;
-    
-    (function animate() {
+
+    function animate() {
         requestAnimationFrame(animate);
         globe.rotation.y += 0.001;
+        stars.rotation.y -= 0.0002;
         renderer.render(scene, camera);
-    })();
+    }
+    animate();
 }
 
-// --- 8. SYSTEM BOOT ---
+// --- 8. INITIALIZATION & NAVIGATION ---
 window.onload = () => {
-    initGlobe();
+    console.log(`System Booting... v${SYSTEM_VERSION}`);
+    initVisuals();
     
-    const pillars = [
-        { id: "ETHICAL", name: "Ethical Algo", img: "assets/logo-ethical.png", fallback: "⚖️", desc: "Kompas moral digital." },
-        { id: "STANDALONE", name: "Stand-alone OS", img: "assets/logo-os.png", fallback: "📱", desc: "Operasi 100% offline." },
-        { id: "REGEN", name: "Regenerative", img: "assets/logo-regen.png", fallback: "🌿", desc: "Impak hijau ke MYR." },
-        { id: "SOVEREIGN", name: "Sovereign RWA", img: "assets/logo-rwa.png", fallback: "🔐", desc: "Aset Gold/Land." }
-    ];
+    // Auto-sync every 5 seconds
+    setInterval(syncWalletData, 5000);
 
-    const list = document.getElementById('product-list');
-    if (list) {
-        list.innerHTML = pillars.map(p => `
-            <div onclick="openSidebar('${p.id}')" class="cosmos-card p-10 group cursor-pointer border border-transparent hover:border-emerald-500/30 rounded-2xl transition-all duration-500">
-                <div class="mb-8 h-14 w-14">
-                     <img src="${p.img}" onerror="this.outerHTML='<div class=\'text-4xl\'>${p.fallback}</div>'">
-                </div>
-                <div class="text-[10px] uppercase tracking-[0.5em] text-emerald-500 mb-4 font-black">NODE_${p.id}</div>
-                <h3 class="text-2xl font-medium mb-4 text-white">${p.name}</h3>
-                <p class="text-[13px] text-gray-500">${p.desc}</p>
-            </div>
-        `).join('');
-    }
-
-    const saved = localStorage.getItem('vrt_address');
-    if (saved) updateWalletUI(saved);
+    const savedAddr = localStorage.getItem('vrt_address');
+    if (savedAddr) updateWalletUI(savedAddr);
 };
 
-// --- 9. NAVIGATION ---
 function openSidebar(key) {
     const sidebar = document.getElementById('sovereign-sidebar');
     const content = document.getElementById('sidebar-dynamic-content');
     const data = SIDEBAR_DATA[key];
+    
     if (data && content) {
-        content.innerHTML = `<h2 class="text-3xl font-medium text-white">${data.title}</h2><div class="mt-8">${data.body}</div>`;
+        content.innerHTML = `
+            <div class="animate-in fade-in slide-in-from-right-10 duration-500">
+                <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-black mb-2 uppercase">${data.badge}</div>
+                <h2 class="text-4xl font-light text-white tracking-tighter mb-8">${data.title}</h2>
+                <div class="sidebar-body">${data.body}</div>
+            </div>
+        `;
     }
     sidebar?.classList.add('open');
 }
+
 function closeSidebar() { document.getElementById('sovereign-sidebar')?.classList.remove('open'); }
 function closeSeedModal() { document.getElementById('seed-modal')?.classList.add('hidden'); }
