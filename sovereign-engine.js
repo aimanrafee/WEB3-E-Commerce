@@ -1,7 +1,7 @@
 /**
  * GLOBAL 2050 - SOVEREIGN ASSET ENGINE
  * Fokus: Logik Ekonomi, Penyimpanan Data LocalStorage, & MYR Currency.
- * Versi: 1.0.6 (Solid 2050 Production)
+ * Versi: 1.0.7 (Solid 2050 Production - Fixed UI Persistence)
  */
 
 // 1. Inisialisasi Data dari LocalStorage
@@ -29,6 +29,14 @@ setInterval(() => {
 // 3. Fungsi Simpan Data
 function saveAssets() {
     localStorage.setItem('es_rfs_assets', JSON.stringify(userAssets));
+}
+
+// Tambahan: Fungsi untuk memaparkan semula produk (Fix UI Persistence)
+function refreshMarketplace() {
+    if (typeof renderProducts === 'function') {
+        renderProducts(); 
+        console.log("[System] Marketplace Refreshed.");
+    }
 }
 
 // 4. Fungsi Pembelian Aset dengan Fasa Enkripsi & Loading
@@ -109,7 +117,7 @@ function executeTransaction(type, amount, cost) {
     saveAssets();
     
     renderLedgerView();
-    renderProducts(); // Update butang di dashboard
+    refreshMarketplace(); // Memastikan kad produk muncul semula
     syncWithMainUI();
 }
 
@@ -119,7 +127,7 @@ function resetSovereignNode() {
         userAssets = { gold: 0, land: 0, carbon_credits: 0, dividends: 0.0, last_update: Date.now() };
         saveAssets();
         renderLedgerView();
-        renderProducts();
+        refreshMarketplace();
         syncWithMainUI();
     }
 }
@@ -138,13 +146,13 @@ function syncWithMainUI() {
     if (balEl) balEl.innerText = userAssets.dividends.toFixed(8);
 }
 
-// 7. Render Product List (Dashboard) - SUPAYA BUTANG MUNCUL DI TENAH
+// 7. Render Product List (Dashboard)
 function renderProducts() {
     const productContainer = document.getElementById('product-list');
     if (!productContainer) return;
 
     productContainer.innerHTML = `
-        <div class="bg-white/5 border border-white/10 p-8 rounded-3xl reveal">
+        <div class="bg-white/5 border border-white/10 p-8 rounded-3xl reveal active">
             <div class="text-[9px] text-emerald-500 font-black mb-4 uppercase tracking-widest">Physical Asset</div>
             <h3 class="text-2xl font-bold mb-2 text-white leading-none">Gold Bullion LOT</h3>
             <p class="text-gray-400 text-xs mb-8">Emas fizikal 999.9 yang disimpan dalam peti besi berdaulat.</p>
@@ -154,7 +162,7 @@ function renderProducts() {
             </button>
         </div>
 
-        <div class="bg-white/5 border border-white/10 p-8 rounded-3xl reveal delay-1">
+        <div class="bg-white/5 border border-white/10 p-8 rounded-3xl reveal active delay-1">
             <div class="text-[9px] text-blue-500 font-black mb-4 uppercase tracking-widest">Real Estate</div>
             <h3 class="text-2xl font-bold mb-2 text-white leading-none">Regen Land Sector</h3>
             <p class="text-gray-400 text-xs mb-8">Pajakan tanah regeneratif untuk pemulihan ekosistem.</p>
@@ -201,6 +209,6 @@ function renderLedgerView() {
 
 // Jalankan render awal
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
+    refreshMarketplace();
     updateTickerUI();
 });
