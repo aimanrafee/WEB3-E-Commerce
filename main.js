@@ -5,7 +5,7 @@
 
 // --- LABEL: GITHUB PAGES - CONNECTION CONFIG ---
 // Diperbetulkan: Membuang "http://" berganda
-const LOCAL_NODE_IP = "http://192.168.8.102:3000"; 
+const LOCAL_NODE_IP = "http://192.168.8.102:3000";
 
 // --- DATA SIDEBAR (Static Data) ---
 const SIDEBAR_DATA = {
