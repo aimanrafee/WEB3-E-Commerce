@@ -51,39 +51,58 @@
             <div class="hidden md:flex gap-12 text-[10px] font-bold uppercase tracking-widest">
                 <a onclick="openSidebar('ETHICAL')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">ES-RFS Protocol</a>
                 <a onclick="openSidebar('STANDALONE')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Sovereign Nodes</a>
-                
-                <a href="http://192.168.8.102:3000" target="_blank" class="nav-link text-emerald-500 cursor-pointer font-black border-b border-emerald-500/30">
-                    View RWA Ledger
-                </a>
-                
                 <a onclick="openSidebar('REGEN')" class="nav-link cursor-pointer hover:text-emerald-500 transition-colors">Natural Capital</a>
             </div>
 
-            <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline">CONNECT</a>
+            <a href="https://t.me/globalexperts2050" target="_blank" class="btn-outline text-[10px] tracking-widest px-6 py-2 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all">CONNECT</a>
         </nav>
 
-        <main class="container mx-auto px-6 md:px-12 pt-24">
-            <div class="max-w-3xl">
-                <div class="es-rfs-badge reveal">Authorized ES-RFS Standard</div>
-                <h1 class="hero-title mb-10 reveal delay-1">Ethical. Stand-alone.<br>Regenerative Future.</h1>
-                <p class="text-gray-400 text-lg md:text-xl mb-14 max-w-xl leading-relaxed font-light reveal delay-2">
-                    Beroperasi di bawah protokol kedaulatan <span class="text-white">ES-RFS</span>. Sistem operasi mandiri yang mengawal aset dunia nyata dan memulihkan ekosistem tanpa pergantungan pusat.
-                </p>
+        <main class="container mx-auto px-6 md:px-12 pt-12 md:pt-24">
+            <div class="max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <div class="es-rfs-badge reveal inline-block px-4 py-1 border border-emerald-500/30 text-emerald-500 text-[9px] font-bold tracking-widest rounded-full mb-6 uppercase bg-emerald-500/5">Authorized ES-RFS Standard</div>
+                    <h1 class="hero-title text-5xl md:text-7xl font-medium tracking-tighter mb-8 reveal delay-1 leading-[0.9]">Ethical.<br>Stand-alone.<br>Regenerative.</h1>
+                    <p class="text-gray-400 text-lg mb-10 max-w-sm leading-relaxed font-light reveal delay-2">
+                        Beroperasi di bawah protokol <span class="text-white">ES-RFS</span>. Sistem mandiri untuk mengawal aset RWA secara berdaulat.
+                    </p>
 
-                <div class="flex flex-col md:flex-row gap-6 mb-24 reveal delay-3">
-                    <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">
-                        Aktifkan Sovereign Node
-                    </button>
-                    
-                    <a href="http://192.168.x.x:3000" target="_blank" class="border border-white/20 px-10 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/5 transition-all text-white text-center">
-                        Sistem Ledger
-                    </a>
+                    <div class="flex flex-wrap gap-4 reveal delay-3">
+                        <button onclick="activateNode('PRIMARY_CORE')" class="bg-white text-black px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all">
+                            Aktifkan Node
+                        </button>
+                    </div>
                 </div>
 
-                <div class="flex flex-wrap gap-x-16 gap-y-6 stats-text reveal delay-4 uppercase tracking-[0.2em] text-[10px] text-gray-500">
-                    <div><span class="stats-highlight text-white uppercase">Balance:</span> <span id="wallet-balance-github" class="text-emerald-500 tracking-tighter">0.00</span> $VRT</div>
-                    <div><span class="stats-highlight text-white uppercase">Stability:</span> 100% OFFLINE</div>
-                    <div><span class="stats-highlight text-white uppercase">Currency:</span> MYR NATIVE</div>
+                <div class="flex flex-col gap-8 reveal delay-3">
+                    <div class="bg-emerald-500/5 border border-emerald-500/20 p-8 rounded-3xl backdrop-blur-xl relative overflow-hidden group w-full max-w-sm ml-auto">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:rotate-12 transition-transform">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-emerald-500">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+
+                        <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-black mb-4 uppercase">Yield Engine Active</div>
+                        
+                        <div class="text-4xl font-mono font-bold tracking-tighter text-white mb-2">
+                            <span id="wallet-balance-github">0.00000000</span>
+                        </div>
+                        <div class="text-[10px] text-gray-500 mb-8 font-mono">$VRT (Sovereign Assets)</div>
+
+                        <div class="flex items-center gap-4">
+                            <div class="bg-emerald-500/20 border border-emerald-500/40 px-4 py-1.5 rounded-full">
+                                <span class="text-[10px] text-emerald-400 font-black uppercase tracking-widest">119% APR</span>
+                            </div>
+                            <button onclick="compoundYield()" class="text-[10px] font-bold text-white hover:text-emerald-400 transition-all uppercase tracking-widest border-b border-white/10 hover:border-emerald-500">
+                                Compound Now →
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-8 uppercase tracking-[0.2em] text-[9px] text-gray-500 ml-auto mr-4">
+                        <div><span class="text-white">Stability:</span> 100% OFFLINE</div>
+                        <div><span class="text-white">Currency:</span> MYR NATIVE</div>
+                    </div>
                 </div>
             </div>
 
