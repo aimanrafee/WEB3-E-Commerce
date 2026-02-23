@@ -96,8 +96,11 @@
                                 <button onclick="createNewSovereignWallet()" class="w-full py-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 rounded-xl hover:bg-emerald-500/30 transition-all text-[9px] font-bold uppercase tracking-widest">
                                     Create New Wallet (PQC SHA-512)
                                 </button>
+                                <button onclick="showImportUI()" class="w-full py-3 bg-white/5 border border-white/10 text-gray-400 rounded-xl hover:bg-white/10 transition-all text-[9px] font-bold uppercase tracking-widest">
+                                    Import Existing Seed
+                                </button>
                                 <button onclick="connectExternalWallet()" class="w-full py-3 bg-blue-500/20 border border-blue-500/40 text-blue-400 rounded-xl hover:bg-blue-500/30 transition-all text-[9px] font-bold uppercase tracking-widest">
-                                    Connect Crypto Wallet (MetaMask)
+                                    Connect MetaMask
                                 </button>
                             </div>
 
@@ -131,7 +134,7 @@
             </div>
 
             <section id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-48 pb-48">
-                </section>
+            </section>
         </main>
     </div>
 
@@ -150,25 +153,35 @@
         <div class="w-full max-w-md bg-[#0a0a0a] border border-emerald-500/30 p-8 rounded-2xl shadow-[0_0_50px_rgba(16,185,129,0.1)]">
             <div class="text-emerald-500 text-[10px] font-black tracking-[0.3em] mb-2 uppercase text-center">Security Protocol Required</div>
             <h2 class="text-2xl font-medium text-white tracking-tighter mb-6 text-center leading-none">Sahkan Seed Phrase Anda</h2>
-            
             <p class="text-gray-400 text-[11px] leading-relaxed mb-6 text-center">
                 Sila masukkan kembali 64-aksara Seed Phrase yang anda salin tadi untuk mengaktifkan alamat wallet secara rasmi di Sovereign Node.
             </p>
-
             <div class="space-y-4">
                 <textarea id="seed-input-verify" 
                     class="w-full h-24 bg-black border border-white/10 rounded-xl p-4 text-[10px] font-mono text-emerald-400 focus:border-emerald-500/50 outline-none transition-all placeholder:text-gray-700"
                     placeholder="Paste Seed Phrase di sini..."></textarea>
-                
                 <button onclick="verifyAndActivate()" 
                     class="w-full py-4 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-emerald-500 shadow-lg shadow-emerald-900/20 transition-all">
                     Aktifkan Wallet di Ubuntu
                 </button>
-                
                 <button onclick="closeSeedModal()" class="w-full text-[9px] text-gray-600 uppercase font-bold tracking-widest hover:text-gray-400">
                     Batal & Salin Semula
                 </button>
             </div>
+        </div>
+    </div>
+
+    <div id="import-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
+        <div class="w-full max-w-md bg-[#0a0a0a] border border-blue-500/30 p-8 rounded-2xl">
+            <div class="text-blue-500 text-[10px] font-black tracking-[0.3em] mb-2 uppercase text-center">Recovery Protocol</div>
+            <h2 class="text-2xl font-medium text-white tracking-tighter mb-6 text-center">Import Sovereign Wallet</h2>
+            <textarea id="import-seed-input" 
+                class="w-full h-24 bg-black border border-white/10 rounded-xl p-4 text-[10px] font-mono text-blue-400 focus:border-blue-500/50 outline-none mb-4 placeholder:text-gray-700"
+                placeholder="Masukkan 64-aksara Seed Phrase anda di sini..."></textarea>
+            <button onclick="processImport()" class="w-full py-4 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-blue-500 transition-all">
+                Pulihkan Akses & Sync Node
+            </button>
+            <button onclick="document.getElementById('import-modal').classList.add('hidden')" class="w-full mt-4 text-[9px] text-gray-600 uppercase font-bold tracking-widest hover:text-gray-400">Batal</button>
         </div>
     </div>
 
