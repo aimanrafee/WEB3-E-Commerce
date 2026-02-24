@@ -2,7 +2,7 @@
  * GLOBAL 2050 - SOVEREIGN OS SYSTEM LOGIC
  * Version: Solid-2050.Build.01 (Ultimate Edition)
  * Components: PQC Security, Three.js Starfield, Ubuntu Bridge, & RWA Ledger.
- * Special Feature: Dual-Asset Display (Liquid & Staked)
+ * Special Feature: Dual-Asset Display (Liquid & Staked) - Optimized Sync
  */
 
 // --- 1. GLOBAL CONFIGURATIONS ---
@@ -17,8 +17,7 @@ const SIDEBAR_DATA = {
     'ETHICAL': {
         title: 'ES-RFS: Ethical Algorithm',
         badge: 'Moral Core',
-        body: `
-            <div class="space-y-6">
+        body: `<div class="space-y-6">
                 <p class="text-gray-400 text-sm leading-relaxed">Protokol Etika 2050 menetapkan piawaian di mana setiap transaksi ditapis melalui 'Moral Compass' digital.</p>
                 <div class="p-4 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
                     <h4 class="text-xs font-bold text-emerald-500 mb-2 uppercase">Proof of Impact (PoI)</h4>
@@ -33,8 +32,7 @@ const SIDEBAR_DATA = {
     'STANDALONE': {
         title: 'Sovereign Stand-alone OS',
         badge: 'Infrastructure',
-        body: `
-            <div class="space-y-6">
+        body: `<div class="space-y-6">
                 <div class="flex justify-between items-center p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
                     <div>
                         <div class="text-[10px] text-blue-400 font-black uppercase">Mesh Status</div>
@@ -53,8 +51,7 @@ const SIDEBAR_DATA = {
     'REGEN': {
         title: 'Regenerative Economics',
         badge: 'Natural Capital',
-        body: `
-            <div class="space-y-6">
+        body: `<div class="space-y-6">
                 <div class="p-6 bg-gradient-to-br from-emerald-600/20 to-transparent border border-emerald-500/20 rounded-2xl text-center">
                     <div class="text-4xl font-light text-white mb-2 tracking-tighter">14,204</div>
                     <div class="text-[9px] text-emerald-500 font-black uppercase tracking-widest">Carbon Credits Restored</div>
@@ -74,8 +71,7 @@ const SIDEBAR_DATA = {
     'SOVEREIGN': {
         title: 'Sovereign RWA Ledger',
         badge: 'Real World Assets',
-        body: `
-            <div class="space-y-4">
+        body: `<div class="space-y-4">
                 <p class="text-gray-400 text-sm">Pengurusan aset fizikal (Emas, Tanah, Tenaga) yang di-tokenkan secara berdaulat.</p>
                 <div class="p-4 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
                     <div class="flex justify-between text-xs mb-2">
@@ -111,7 +107,6 @@ async function executeSovereignAction(type, payload = {}) {
         return;
     }
 
-    console.log(`[Bridge] Executing ${type}...`);
     try {
         const response = await fetch(`${LOCAL_NODE_IP}/api/execute`, {
             method: 'POST',
@@ -142,16 +137,12 @@ async function executeSovereignAction(type, payload = {}) {
 function sendTransaction() {
     const to = prompt("Masukkan Alamat VRT Penerima:");
     const amount = prompt("Jumlah untuk dihantar:");
-    if (to && amount) {
-        executeSovereignAction('SEND', { to, amount: parseFloat(amount) });
-    }
+    if (to && amount) executeSovereignAction('SEND', { to, amount: parseFloat(amount) });
 }
 
 function stakeVRT() {
     const amount = prompt("Masukkan Jumlah VRT untuk Staking (119% APR):");
-    if (amount) {
-        executeSovereignAction('STAKE', { amount: parseFloat(amount) });
-    }
+    if (amount) executeSovereignAction('STAKE', { amount: parseFloat(amount) });
 }
 
 function compoundYield() {
@@ -162,9 +153,7 @@ function compoundYield() {
 
 function unstakeRequest() {
     const amount = prompt("Masukkan Jumlah untuk Unstake:");
-    if (amount) {
-        executeSovereignAction('UNSTAKE', { amount: parseFloat(amount) });
-    }
+    if (amount) executeSovereignAction('UNSTAKE', { amount: parseFloat(amount) });
 }
 
 // --- 6. WALLET UI & SYNC ---
@@ -172,12 +161,9 @@ async function createNewSovereignWallet() {
     const entropy = window.crypto.getRandomValues(new Uint8Array(32));
     temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
     temporaryAddress = await deriveAddressFromSeed(temporarySeed);
-    
     alert("SILA SALIN SEGERA SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSimpan di tempat selamat.");
-    
     const seedDisplay = document.getElementById('seed-display-area');
     if (seedDisplay) seedDisplay.innerText = temporarySeed;
-    
     document.getElementById('seed-modal')?.classList.remove('hidden');
 }
 
@@ -186,7 +172,6 @@ async function verifyAndActivate() {
     if (input === temporarySeed) {
         localStorage.setItem('vrt_address', temporaryAddress);
         localStorage.setItem('vrt_seed', temporarySeed);
-        
         try {
             await fetch(`${LOCAL_NODE_IP}/api/register-wallet`, {
                 method: 'POST',
@@ -194,12 +179,11 @@ async function verifyAndActivate() {
                 body: JSON.stringify({ address: temporaryAddress })
             });
         } catch (e) { console.warn("Node registration skipped (offline mode)"); }
-
         updateWalletUI(temporaryAddress);
         closeSeedModal();
         alert("✅ WALLET AKTIF: Selamat datang ke Global 2050.");
     } else {
-        alert("❌ Seed tidak sah. Sila pastikan anda memasukkan kod 64-aksara yang betul.");
+        alert("❌ Seed tidak sah.");
     }
 }
 
@@ -212,36 +196,42 @@ function updateWalletUI(address) {
 }
 
 /**
- * KEMASKINI SOLID-2050: Dual Sync Engine
- * Menyelaraskan Liquid Balance dan Staked Assets secara berasingan.
+ * FIXED SYNC ENGINE - SOLID 2050
+ * Memastikan nilai Staked Asset dikemaskini walaupun API offline (Simulation Mode).
  */
 async function syncWalletData() {
     const address = localStorage.getItem('vrt_address');
     if (!address) return;
 
+    const balEl = document.getElementById('wallet-balance-github');
+    const stakedEl = document.getElementById('staked-balance-val');
+
     try {
         const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`);
+        if (!res.ok) throw new Error("Node Response Error");
+        
         const data = await res.json();
         
-        // 1. Update Liquid Balance (Asal)
-        const balEl = document.getElementById('wallet-balance-github');
+        // Liquid Balance
         if (balEl) balEl.innerText = parseFloat(data.balance || 0).toLocaleString(undefined, {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            minimumFractionDigits: 2, maximumFractionDigits: 2
         });
         
-        // 2. Update Staked Assets (Baru)
-        const stakedEl = document.getElementById('staked-balance-val');
-        if (stakedEl) stakedEl.innerText = parseFloat(data.staked || 0).toLocaleString(undefined, {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 8
-        });
+        // Staked Balance - Support pelbagai format key dari API
+        const stakedVal = data.staked || data.staked_balance || data.stakedBalance || 0;
+        if (stakedEl) stakedEl.innerText = parseFloat(stakedVal).toFixed(8);
         
         updateNodeStatus(true);
         isNodeOnline = true;
     } catch (e) {
+        console.warn("Syncing in Stand-alone mode (Simulation)...");
         updateNodeStatus(false);
         isNodeOnline = false;
+        
+        // Fallback: Jika node offline, kita paparkan nilai '0' atau data lokal jika perlu
+        if (stakedEl && stakedEl.innerText === "0.0000") {
+            stakedEl.innerText = "0.00000000";
+        }
     }
 }
 
@@ -285,17 +275,12 @@ function initVisuals() {
 
     const geometry = new THREE.SphereGeometry(2.8, 80, 80);
     const material = new THREE.PointsMaterial({ 
-        color: 0x10b981, 
-        size: 0.015, 
-        transparent: true, 
-        opacity: 0.5,
-        blending: THREE.AdditiveBlending 
+        color: 0x10b981, size: 0.015, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending 
     });
     globe = new THREE.Points(geometry, material);
     scene.add(globe);
 
     camera.position.z = 8;
-
     window.addEventListener('resize', () => {
         camera.aspect = container.clientWidth / container.clientHeight;
         camera.updateProjectionMatrix();
@@ -313,18 +298,13 @@ function initVisuals() {
 
 // --- 8. INITIALIZATION & NAVIGATION ---
 window.onload = () => {
-    console.log(`%c[SYSTEM] Booting Global 2050... v${SYSTEM_VERSION}`, "color: #10b981; font-weight: bold;");
     initVisuals();
-    
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) entry.target.classList.add('active');
-        });
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Auto-sync dipercepatkan ke 3 saat untuk kesan 'Real-time Yield'
+    // Auto-sync setiap 3 saat
     setInterval(syncWalletData, 3000);
 
     const savedAddr = localStorage.getItem('vrt_address');
@@ -335,15 +315,13 @@ function openSidebar(key) {
     const sidebar = document.getElementById('sovereign-sidebar');
     const content = document.getElementById('sidebar-dynamic-content');
     const data = SIDEBAR_DATA[key];
-    
     if (data && content) {
         content.innerHTML = `
             <div class="animate-in fade-in slide-in-from-right-10 duration-500">
                 <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-black mb-2 uppercase">${data.badge}</div>
                 <h2 class="text-4xl font-light text-white tracking-tighter mb-8">${data.title}</h2>
                 <div class="sidebar-body">${data.body}</div>
-            </div>
-        `;
+            </div>`;
     }
     sidebar?.classList.add('open');
 }
@@ -351,11 +329,7 @@ function openSidebar(key) {
 function closeSidebar() { document.getElementById('sovereign-sidebar')?.classList.remove('open'); }
 function closeSeedModal() { document.getElementById('seed-modal')?.classList.add('hidden'); }
 
-// --- 9. EXTRA BRIDGE HELPERS ---
-function showImportUI() {
-    document.getElementById('import-modal')?.classList.remove('hidden');
-}
-
+function showImportUI() { document.getElementById('import-modal')?.classList.remove('hidden'); }
 async function processImport() {
     const input = document.getElementById('import-seed-input').value.trim();
     if (input.length > 10) {
@@ -364,6 +338,6 @@ async function processImport() {
         localStorage.setItem('vrt_seed', input);
         updateWalletUI(addr);
         document.getElementById('import-modal')?.classList.add('hidden');
-        alert("✅ Wallet Dipulihkan & Diselaraskan.");
+        alert("✅ Wallet Dipulihkan.");
     }
 }
