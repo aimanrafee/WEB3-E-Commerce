@@ -86,19 +86,33 @@
 
                         <div class="text-[9px] text-emerald-500 tracking-[0.4em] font-black mb-4 uppercase">Yield Engine Active</div>
                         
-                        <div class="space-y-4 mb-6">
+                        <div class="space-y-3 mb-6">
                             <div class="p-4 bg-black/40 rounded-2xl border border-white/5">
-                                <div class="text-[8px] text-gray-400 uppercase tracking-widest mb-1">Liquid Balance</div>
-                                <div class="text-2xl font-mono font-bold text-white tracking-tighter">
-                                    <span id="wallet-balance-github">0.00</span> <span class="text-[10px] opacity-50">$VRT</span>
+                                <div class="text-[8px] text-gray-500 uppercase tracking-widest mb-1">Liquid Balance</div>
+                                <div class="text-xl font-mono font-bold text-white tracking-tighter">
+                                    <span id="wallet-balance-github">0.00</span> <span class="text-[10px] opacity-50">VRT</span>
                                 </div>
                             </div>
+                            
                             <div class="p-4 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
                                 <div class="text-[8px] text-emerald-500 uppercase tracking-widest mb-1">Staked Assets</div>
-                                <div class="text-2xl font-mono font-bold text-emerald-400 tracking-tighter">
-                                    <span id="staked-balance-val">0.0000</span> <span class="text-[10px] opacity-50">$VRT</span>
+                                <div class="text-xl font-mono font-bold text-emerald-400 tracking-tighter">
+                                    <span id="staked-balance-val">209510.5619</span> <span class="text-[10px] opacity-50">VRT</span>
                                 </div>
-                                <div class="text-[7px] text-emerald-500/70 mt-1 font-bold uppercase tracking-widest">Auto-Compound 1.19% Active</div>
+                                <div class="text-[7px] text-emerald-500/70 mt-1 font-bold uppercase tracking-widest italic">Auto-Compound 1.19% Active</div>
+                            </div>
+
+                            <div class="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+                                <div class="text-[8px] text-blue-400 uppercase tracking-widest mb-2">Compounding State (Rewards)</div>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-xl font-mono font-bold text-blue-400 animate-pulse tracking-tighter">
+                                        <span id="compounding-state-val">0.00000000</span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="claimRewards()" class="px-2 py-1 bg-blue-500/20 hover:bg-blue-500 text-blue-400 hover:text-white text-[8px] font-bold uppercase rounded transition-all">Claim</button>
+                                        <button onclick="restakeRewards()" class="px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white text-[8px] font-bold uppercase rounded transition-all">Stake</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
