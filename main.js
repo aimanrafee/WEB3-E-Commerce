@@ -6,7 +6,7 @@
  */
 
 // --- 1. GLOBAL CONFIGURATIONS ---
-const LOCAL_NODE_IP = "http://192.168.8.102:3000";
+const LOCAL_NODE_IP = "https://lemon-ends-share.loca.lt";
 const SYSTEM_VERSION = "2050.SOLID";
 let temporarySeed = ""; 
 let temporaryAddress = "";
