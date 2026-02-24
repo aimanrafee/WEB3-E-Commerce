@@ -2,6 +2,7 @@
  * GLOBAL 2050 - SOVEREIGN OS SYSTEM LOGIC
  * Version: Solid-2050.Build.01 (Ultimate Edition)
  * Components: PQC Security, Three.js Starfield, Ubuntu Bridge, & RWA Ledger.
+ * Special Feature: Dual-Asset Display (Liquid & Staked)
  */
 
 // --- 1. GLOBAL CONFIGURATIONS ---
@@ -127,8 +128,6 @@ async function executeSovereignAction(type, payload = {}) {
         if (result.success) {
             alert(`✅ PROTOKOL BERJAYA: ${type}\n\nTransaction Hash: ${result.txHash || 'SECURE_OFFLINE_LOG'}`);
             syncWalletData(); 
-            
-            // KEMASKINI: Memanggil semula senarai produk selepas transaksi berjaya
             if (window.renderProducts) window.renderProducts(); 
         } else {
             alert(`❌ RALAT NODE: ${result.message || result.error}`);
@@ -174,7 +173,6 @@ async function createNewSovereignWallet() {
     temporarySeed = Array.from(entropy).map(b => b.toString(16).padStart(2, '0')).join('');
     temporaryAddress = await deriveAddressFromSeed(temporarySeed);
     
-    // PAPARAN UTAMA SEED
     alert("SILA SALIN SEGERA SEED PHRASE ANDA:\n\n" + temporarySeed + "\n\nSimpan di tempat selamat.");
     
     const seedDisplay = document.getElementById('seed-display-area');
@@ -213,6 +211,10 @@ function updateWalletUI(address) {
     syncWalletData();
 }
 
+/**
+ * KEMASKINI SOLID-2050: Dual Sync Engine
+ * Menyelaraskan Liquid Balance dan Staked Assets secara berasingan.
+ */
 async function syncWalletData() {
     const address = localStorage.getItem('vrt_address');
     if (!address) return;
@@ -221,8 +223,19 @@ async function syncWalletData() {
         const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`);
         const data = await res.json();
         
+        // 1. Update Liquid Balance (Asal)
         const balEl = document.getElementById('wallet-balance-github');
-        if (balEl) balEl.innerText = data.balance.toFixed(8);
+        if (balEl) balEl.innerText = parseFloat(data.balance || 0).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
+        // 2. Update Staked Assets (Baru)
+        const stakedEl = document.getElementById('staked-balance-val');
+        if (stakedEl) stakedEl.innerText = parseFloat(data.staked || 0).toLocaleString(undefined, {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 8
+        });
         
         updateNodeStatus(true);
         isNodeOnline = true;
@@ -259,7 +272,6 @@ function initVisuals() {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    // Stars
     const starQty = 2000;
     const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.05 });
@@ -271,7 +283,6 @@ function initVisuals() {
     stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
-    // Globe
     const geometry = new THREE.SphereGeometry(2.8, 80, 80);
     const material = new THREE.PointsMaterial({ 
         color: 0x10b981, 
@@ -313,8 +324,8 @@ window.onload = () => {
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Auto-sync
-    setInterval(syncWalletData, 5000);
+    // Auto-sync dipercepatkan ke 3 saat untuk kesan 'Real-time Yield'
+    setInterval(syncWalletData, 3000);
 
     const savedAddr = localStorage.getItem('vrt_address');
     if (savedAddr) updateWalletUI(savedAddr);
