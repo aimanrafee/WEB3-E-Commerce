@@ -222,12 +222,15 @@ async function syncWalletData() {
     const balEl = document.getElementById('wallet-balance-github');
     const stakedEl = document.getElementById('staked-balance-val');
 
-    try {
-        const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`);
+   try {
+        const res = await fetch(`${LOCAL_NODE_IP}/api/balance/${address}`, {
+            headers: {
+                "Bypass-Tunnel-Reminder": "true"
+            }
+        });
         if (!res.ok) throw new Error("Connection failed");
 
         const data = await res.json();
-        
         // 1. Update Liquid Balance
         if (balEl) {
             balEl.innerText = parseFloat(data.balance || 0).toLocaleString(undefined, {
